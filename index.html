@@ -7,6 +7,7 @@
 <meta name="description" content="آزمون و آموزش حسابداری — کنکور کاردانی، کارشناسی ارشد، دکتری و استخدامی">
 <meta name="theme-color" content="#0a3d32">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -229,22 +230,24 @@ th{background:#f5f5f4;color:#57534e}
     <div class="text-center mb-5">
       <div class="logo mx-auto mb-3" id="lgAuth"></div>
       <div class="brand-font text-2xl" style="color:var(--g)">HESABDARSPEED</div>
-      <div class="text-xs text-slate-500 mt-1">ورود به سامانه آزمون</div>
+      <div class="text-xs text-slate-500 mt-1">ورود با ایمیل و رمز عبور · نام کاربری برای نمایش در سامانه</div>
     </div>
     <div class="flex bg-stone-100 rounded-xl p-1 mb-4 text-sm">
       <button type="button" class="flex-1 py-2 rounded-lg bg-white shadow font-bold" id="bL" onclick="tab('l')">ورود</button>
       <button type="button" class="flex-1 py-2 rounded-lg text-slate-500" id="bR" onclick="tab('r')">ثبت‌نام</button>
     </div>
     <form id="fL" class="space-y-3">
-      <div><label>نام کاربری</label><input id="lU" required dir="ltr"></div>
-      <div><label>رمز عبور</label><input id="lP" type="password" required minlength="4"></div>
+      <div><label>ایمیل</label><input id="lU" type="email" autocomplete="email" required dir="ltr" placeholder="name@example.com"></div>
+      <div><label>رمز عبور</label><input id="lP" type="password" required minlength="8"></div>
       <div id="eL" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3"></div>
       <button class="btn w-full">ورود</button>
+      <button type="button" class="text-xs text-teal-700 w-full" onclick="forgotPassword()">فراموشی رمز عبور؟</button>
     </form>
     <form id="fR" class="space-y-3 hidden">
       <div><label>نام و نام خانوادگی</label><input id="rN" required></div>
-      <div><label>نام کاربری</label><input id="rU" required pattern="[A-Za-z0-9_]{3,20}" dir="ltr"></div>
-      <div><label>رمز عبور</label><input id="rP" type="password" required minlength="4"></div>
+      <div><label>نام کاربری</label><input id="rU" required pattern="[A-Za-z0-9_]{3,20}" dir="ltr" autocomplete="username"></div>
+      <div><label>ایمیل معتبر</label><input id="rEmail" type="email" required autocomplete="email" dir="ltr" placeholder="name@example.com"></div>
+      <div><label>رمز عبور</label><input id="rP" type="password" required minlength="8"></div>
       <div><label>تکرار رمز</label><input id="rP2" type="password" required></div>
       <div id="eR" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3"></div>
       <button class="btn w-full">ایجاد حساب داوطلب</button>
@@ -295,7 +298,185 @@ const D={
   sSettings:v=>D.s('hsSet',v),
   visits:()=>D.g('hsVisits',{count:0,last:null})
 };
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+
+// Snapshot legacy local-only content before the cloud cache is hydrated.
+const LEGACY_LOCAL = { questions:D.Q(), exams:D.E(), announcements:D.N() };
+// ===== Supabase backend =====
+const SUPABASE_URL = 'https://nidfveftjbqxrzhuqgya.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_dHQGKQ16qkFlEL_RiiXRrQ_bsbonCNl';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+});
+let cloudReady = false;
+let cloudBusy = false;
+const cloudErr = (e, label='خطا در ارتباط با سرور') => {
+  console.error(label, e);
+  toast(`${label}: ${e?.message || 'لطفاً دوباره تلاش کنید'}`);
+};
+const asResult = (r) => ({
+  id:r.id, examId:r.exam_id, examTitle:r.exam_title || '', userId:r.user_id,
+  studentName:r.student_name || '', correct:r.correct_count || 0, wrong:r.wrong_count || 0,
+  blank:r.blank_count || 0, total:r.total_count || 0, negMark:Number(r.negative_mark || 0),
+  passPercent:Number(r.pass_percent ?? 50), rawScore:Number(r.raw_score || 0),
+  percent:Number(r.percent || 0), passed:!!r.passed, details:r.result_details || [],
+  finishedAt:r.submitted_at, auto:!!r.auto_submitted, rank:r.rank
+});
+
+async function loadCloudData(){
+  cloudBusy = true;
+  try {
+    const {data:{user},error:authError}=await sb.auth.getUser();
+    if(authError) throw authError;
+    if(!user){ cloudReady=false; return false; }
+    const {data:profile,error:profileError}=await sb.from('profiles').select('*').eq('id',user.id).single();
+    if(profileError) throw profileError;
+    if(!profile.active) { await sb.auth.signOut(); throw new Error('حساب کاربری شما غیرفعال شده است.'); }
+    const isAdmin=profile.role==='ADMIN';
+    const [qRes,eRes,eqRes,rRes,nRes,cRes,setRes,uRes]=await Promise.all([
+      sb.from('questions').select('*').order('created_at',{ascending:true}),
+      sb.from('exams').select('*').order('created_at',{ascending:true}),
+      sb.from('exam_questions').select('*'),
+      sb.from('attempts').select('*').order('submitted_at',{ascending:false}),
+      sb.from('announcements').select('*').order('created_at',{ascending:false}),
+      sb.from('comments').select('*').order('created_at',{ascending:false}),
+      sb.from('site_settings').select('*'),
+      isAdmin ? sb.from('profiles').select('*').order('created_at',{ascending:true}) : Promise.resolve({data:[profile],error:null})
+    ]);
+    for(const x of [qRes,eRes,eqRes,rRes,nRes,cRes,setRes,uRes]) if(x.error) throw x.error;
+    let keys={};
+    if(isAdmin){
+      const {data,error}=await sb.from('question_answer_keys').select('*');
+      if(error) throw error;
+      (data||[]).forEach(k=>keys[k.question_id]=k.correct_option);
+    }
+    const qs=(qRes.data||[]).map(q=>({id:q.id,book:q.book,module:q.module,text:q.question_text,opts:q.options,correct:keys[q.id],difficulty:q.difficulty,published:q.published}));
+    const links={}; (eqRes.data||[]).forEach(x=>(links[x.exam_id] ||= []).push(x));
+    const exams=(eRes.data||[]).map(e=>({
+      id:e.id,code:e.id.slice(0,8),title:e.title,duration:e.duration_minutes,negMark:Number(e.negative_mark||0),
+      shuffle:!!e.shuffle_questions,allowRetake:!!e.allow_retake,allowBack:!!e.allow_back,
+      showResult:!!e.show_result,passPercent:Number(e.pass_percent??50),
+      questionIds:(links[e.id]||[]).sort((a,b)=>a.position-b.position).map(x=>x.question_id),
+      startAt:e.start_at,endAt:e.end_at,paid:false,price:0,createdAt:e.created_at,isPublished:e.is_published
+    }));
+    const profileById={}; (uRes.data||[]).forEach(u=>profileById[u.id]=u);
+    const results=(rRes.data||[]).filter(a=>a.status==='submitted').map(a=>{
+      const p=profileById[a.user_id];
+      const ex=(eRes.data||[]).find(e=>e.id===a.exam_id);
+      return asResult({...a,exam_title:ex?.title||'',student_name:p?.full_name||'داوطلب',negative_mark:ex?.negative_mark,pass_percent:ex?.pass_percent});
+    });
+    // Compute ranks for the current visible result set.
+    const grouped={}; results.forEach(r=>(grouped[r.examId] ||= []).push(r));
+    Object.values(grouped).forEach(arr=>{arr.sort((a,b)=>b.percent-a.percent);let rank=1;arr.forEach((r,i)=>{if(i&&r.percent<arr[i-1].percent)rank=i+1;r.rank=rank;});});
+    D.s('hsU',(uRes.data||[]).map(u=>({id:u.id,name:u.full_name,username:u.username,role:u.role,active:u.active,createdAt:u.created_at})));
+    D.s('hsQ',qs); D.s('hsE',exams); D.s('hsR',results);
+    D.s('hsN',(nRes.data||[]).map(n=>({id:n.id,title:n.title,body:n.body,at:n.created_at,by:'مدیر'})));
+    D.s('hsC',(cRes.data||[]).map(c=>({id:c.id,name:c.display_name,text:c.body,rate:c.rating,at:c.created_at,userId:c.user_id})));
+    const settings=(setRes.data||[]).find(x=>x.key==='general')?.value || {};
+    D.s('hsSet',{shuffle:settings.shuffle??true,passPercent:settings.passPercent??50,cardNumber:settings.cardNumber||'',cardName:settings.cardName||''});
+    D.setA({id:profile.id,name:profile.full_name,username:profile.username,role:profile.role,active:profile.active,email:user.email});
+    cloudReady=true;
+    return true;
+  } finally { cloudBusy=false; }
+}
+
+async function saveQuestionsCloud(rows, old=[]){
+  if(!cloudReady||!adm()) return;
+  try{
+    for(const q of rows){
+      const {error}=await sb.from('questions').upsert({id:q.id,book:q.book||'',module:q.module||'',question_text:q.text,options:q.opts,difficulty:q.difficulty||'متوسط',published:q.published!==false,created_by:me().id});
+      if(error) throw error;
+      if(q.correct){const {error:ke}=await sb.from('question_answer_keys').upsert({question_id:q.id,correct_option:q.correct});if(ke)throw ke;}
+    }
+    const keep=rows.map(q=>q.id);
+    for(const q of old.filter(x=>!keep.includes(x.id))){const {error}=await sb.from('questions').delete().eq('id',q.id);if(error)throw error;}
+  }catch(e){cloudErr(e,'ذخیره سؤال ناموفق بود');}
+}
+async function saveExamsCloud(rows, old=[]){
+  if(!cloudReady||!adm()) return;
+  try{
+    for(const ex of rows){
+      const {error}=await sb.from('exams').upsert({id:ex.id,title:ex.title,description:'',duration_minutes:ex.duration, start_at:ex.startAt||null,end_at:ex.endAt||null,is_published:true,shuffle_questions:!!ex.shuffle,negative_mark:ex.negMark||0,pass_percent:ex.passPercent??50,allow_retake:!!ex.allowRetake,allow_back:ex.allowBack!==false,show_result:ex.showResult!==false,created_by:me().id});
+      if(error) throw error;
+      const {error:delErr}=await sb.from('exam_questions').delete().eq('exam_id',ex.id);if(delErr)throw delErr;
+      const links=(ex.questionIds||[]).map((question_id,i)=>({exam_id:ex.id,question_id,position:i+1}));
+      if(links.length){const {error:linkErr}=await sb.from('exam_questions').insert(links);if(linkErr)throw linkErr;}
+    }
+    const keep=rows.map(x=>x.id);
+    for(const ex of old.filter(x=>!keep.includes(x.id))){const {error}=await sb.from('exams').delete().eq('id',ex.id);if(error)throw error;}
+  }catch(e){cloudErr(e,'ذخیره آزمون ناموفق بود');}
+}
+async function saveAnnouncementsCloud(rows, old=[]){
+  if(!cloudReady||!adm())return;
+  try{
+    for(const n of rows){const {error}=await sb.from('announcements').upsert({id:n.id,title:n.title,body:n.body,created_by:me().id,published:true});if(error)throw error;}
+    const keep=rows.map(x=>x.id);for(const n of old.filter(x=>!keep.includes(x.id))){const {error}=await sb.from('announcements').delete().eq('id',n.id);if(error)throw error;}
+  }catch(e){cloudErr(e,'ذخیره اطلاعیه ناموفق بود');}
+}
+async function saveCommentsCloud(rows, old=[]){
+  if(!cloudReady)return;
+  try{
+    for(const c of rows.filter(x=>!old.some(o=>o.id===x.id))){const {error}=await sb.from('comments').insert({id:c.id,user_id:me().id,display_name:c.name,body:c.text,rating:c.rate,approved:false});if(error)throw error;}
+    if(adm()){const keep=rows.map(x=>x.id);for(const c of old.filter(x=>!keep.includes(x.id))){const {error}=await sb.from('comments').delete().eq('id',c.id);if(error)throw error;}}
+  }catch(e){cloudErr(e,'ثبت نظر ناموفق بود');}
+}
+async function saveProfilesCloud(rows){
+  if(!cloudReady||!adm())return;
+  try{for(const u of rows){const {error}=await sb.from('profiles').update({active:!!u.active}).eq('id',u.id);if(error)throw error;}}
+  catch(e){cloudErr(e,'به‌روزرسانی کاربر ناموفق بود');}
+}
+async function saveSettingsCloud(value){
+  if(!cloudReady||!adm())return;
+  try{const {error}=await sb.from('site_settings').upsert({key:'general',value,updated_by:me().id,updated_at:new Date().toISOString()});if(error)throw error;}
+  catch(e){cloudErr(e,'ذخیره تنظیمات ناموفق بود');}
+}
+
+async function migrateLegacyData(){
+  if(!adm())return;
+  const oldQ=Array.isArray(LEGACY_LOCAL.questions)?LEGACY_LOCAL.questions:[];
+  const oldE=Array.isArray(LEGACY_LOCAL.exams)?LEGACY_LOCAL.exams:[];
+  const demoTexts=new Set([
+    'معادله اساسی حسابداری کدام است؟',
+    'فاکتور خرید کالا معمولاً در کدام حساب ثبت می‌شود؟',
+    'موجودی صندوق در ترازنامه در کدام گروه است؟',
+    'چک مدت‌دار دریافتنی در کدام حساب منعکس می‌شود؟',
+    'استهلاک دارایی ثابت چه نوع حسابی است؟'
+  ]);
+  const uuidRe=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const idMap={};
+  const validOldQ=oldQ.filter(q=>q&&q.text&&!demoTexts.has(q.text));
+  validOldQ.forEach(q=>idMap[q.id]=uuidRe.test(q.id||'')?q.id:uid());
+  const currentQ=D.Q(),currentE=D.E();
+  const qIds=new Set(currentQ.map(q=>q.id));
+  const addQ=validOldQ.filter(q=>!qIds.has(idMap[q.id])).map(q=>({
+    id:idMap[q.id],book:q.book||'',module:q.module||'',text:q.text,opts:Array.isArray(q.opts)?q.opts:[],
+    correct:q.correct||'',difficulty:q.difficulty||'متوسط',published:true
+  })).filter(q=>q.opts.length===4&&['الف','ب','ج','د'].includes(q.correct));
+  const mergedQ=[...currentQ,...addQ];
+  if(addQ.length){D.s('hsQ',mergedQ);await saveQuestionsCloud(mergedQ,currentQ);}
+  const examIdMap={};oldE.forEach(e=>{if(e&&e.id)examIdMap[e.id]=uuidRe.test(e.id)?e.id:uid();});
+  const eIds=new Set(currentE.map(e=>e.id));
+  const addE=oldE.filter(e=>e&&e.title&&!eIds.has(examIdMap[e.id])).map(e=>({
+    id:examIdMap[e.id],title:e.title,duration:Number(e.duration)||30,negMark:Number(e.negMark)||0,
+    shuffle:!!e.shuffle,allowRetake:!!e.allowRetake,allowBack:e.allowBack!==false,
+    showResult:e.showResult!==false,passPercent:Number(e.passPercent??50),
+    questionIds:(e.questionIds||[]).map(id=>idMap[id]||id).filter(id=>mergedQ.some(q=>q.id===id)),
+    startAt:e.startAt||null,endAt:e.endAt||null,paid:false,price:0
+  })).filter(e=>e.questionIds.length>0);
+  const mergedE=[...currentE,...addE];
+  if(addE.length){D.s('hsE',mergedE);await saveExamsCloud(mergedE,currentE);}
+  LEGACY_LOCAL.questions=[];LEGACY_LOCAL.exams=[];
+  toast(`انتقال انجام شد: ${toFa(addQ.length)} سؤال و ${toFa(addE.length)} آزمون`);
+  viewQ();
+}
+// Keep the existing UI's synchronous cache interface while writing mutations to Supabase.
+D.sQ = v=>{const old=D.Q();D.s('hsQ',v);void saveQuestionsCloud(v,old);};
+D.sE = v=>{const old=D.E();D.s('hsE',v);void saveExamsCloud(v,old);};
+D.sN = v=>{const old=D.N();D.s('hsN',v);void saveAnnouncementsCloud(v,old);};
+D.sC = v=>{const old=D.C();D.s('hsC',v);void saveCommentsCloud(v,old);};
+D.sU = v=>{D.s('hsU',v); void saveProfilesCloud(v);};
+D.sSettings = v=>{D.s('hsSet',v); void saveSettingsCloud(v);};
+
+const uid=()=>crypto.randomUUID();
 const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const toFa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
 const toEn=n=>String(n).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
@@ -404,43 +585,18 @@ function deleteComment(id){
   if(!me()||me().role!=='ADMIN') return alert('فقط مدیر می‌تواند نظر را حذف کند');
   if(!confirm('این نظر حذف شود؟')) return;
   D.sC(D.C().filter(c=>c.id!==id));
-  toast('نظر حذف شد');
+  toast('درخواست حذف نظر ارسال شد');
   renderComments();
 }
 
 commentForm.onsubmit=e=>{
   e.preventDefault();
-  const arr=D.C();
-  arr.push({id:uid(),name:cName.value.trim(),text:cText.value.trim(),rate:+cRate.value||5,at:new Date().toISOString()});
-  D.sC(arr); cName.value=''; cText.value=''; toast('نظر شما ثبت شد'); renderComments();
+  if(!me()) return showAuth('l'),toast('برای ثبت نظر ابتدا وارد شوید');
+  const arr=D.C(); arr.push({id:uid(),name:me().name,text:cText.value.trim(),rate:+cRate.value||5,at:new Date().toISOString()});
+  D.sC(arr); cText.value=''; toast('نظر برای بررسی مدیر ارسال شد'); renderComments();
 };
 
-async function seed(){
-  let u=D.U();
-  if(!u.find(x=>x.username==='admin')){
-    const s=uid();
-    u.push({id:'admin',name:'امیرحسین موذن',username:'admin',salt:s,passwordHash:await H('Admin@1234',s),role:'ADMIN',active:1,createdAt:new Date().toISOString()});
-    D.sU(u);
-  }
-  if(!D.Q().length){
-    D.sQ([
-      {id:uid(),book:'حسابداری پایه',module:'مفاهیم',text:'معادله اساسی حسابداری کدام است؟',opts:['دارایی = بدهی + سرمایه','دارایی = هزینه','بدهی = درآمد','سرمایه = فروش'],correct:'الف',difficulty:'آسان'},
-      {id:uid(),book:'خرید و فروش',module:'ثبت',text:'فاکتور خرید کالا معمولاً در کدام حساب ثبت می‌شود؟',opts:['خرید کالا','فروش کالا','سرمایه','اسناد پرداختنی فقط'],correct:'الف',difficulty:'متوسط'},
-      {id:uid(),book:'وجوه نقد',module:'صندوق',text:'موجودی صندوق در ترازنامه در کدام گروه است؟',opts:['دارایی جاری','بدهی جاری','حقوق مالکانه','درآمد'],correct:'الف',difficulty:'آسان'},
-      {id:uid(),book:'اسناد تجاری',module:'چک',text:'چک مدت‌دار دریافتنی در کدام حساب منعکس می‌شود؟',opts:['اسناد دریافتنی','اسناد پرداختنی','صندوق','سرمایه'],correct:'الف',difficulty:'متوسط'},
-      {id:uid(),book:'حسابداری',module:'استهلاک',text:'استهلاک دارایی ثابت چه نوع حسابی است؟',opts:['هزینه','دارایی','بدهی','سرمایه'],correct:'الف',difficulty:'متوسط'},
-    ]);
-  }
-  if(!D.C().length){
-    D.sC([
-      {id:uid(),name:'سارا محمدی',text:'برای کنکور کاردانی حسابداری خیلی کمکم کرد. کارنامه و آزمون زمان‌دار عالی بود.',rate:5,at:new Date().toISOString()},
-      {id:uid(),name:'رضا احمدی',text:'بانک سؤال و خروجی PDF دفترچه برای تدریس کلاس‌ها عالیه.',rate:5,at:new Date().toISOString()},
-    ]);
-  }
-  if(!D.N().length){
-    D.sN([{id:uid(),title:'به HESABDARSPEED خوش آمدید',body:'کانال تلگرام @hesabdar_speed و گروه پرسش و پاسخ را از دست ندهید.',at:new Date().toISOString(),by:'سیستم'}]);
-  }
-}
+async function seed(){ /* Cloud data is loaded from Supabase; no browser-side demo accounts are created. */ }
 
 function showAuth(t){authModal.classList.remove('hidden');tab(t||'l')}
 function hideAuth(){authModal.classList.add('hidden')}
@@ -449,27 +605,39 @@ function tab(t){
   bL.className='flex-1 py-2 rounded-lg '+(t==='l'?'bg-white shadow font-bold':'text-slate-500');
   bR.className='flex-1 py-2 rounded-lg '+(t==='r'?'bg-white shadow font-bold':'text-slate-500');
 }
+async function forgotPassword(){
+  const email=(lU.value||'').trim().toLowerCase();
+  if(!email)return alert('ابتدا ایمیل خود را وارد کنید.');
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+  if(error)return alert(error.message);
+  alert('اگر این ایمیل در سامانه ثبت شده باشد، لینک بازیابی رمز برای آن ارسال می‌شود. پس از باز کردن لینک، وارد بخش پروفایل شوید و رمز جدید را ثبت کنید.');
+}
 fL.onsubmit=async e=>{
   e.preventDefault(); eL.classList.add('hidden');
-  const id=lU.value.trim().toLowerCase();
-  const u=D.U().find(x=>x.username===id&&x.active);
-  if(!u){eL.textContent='کاربر یافت نشد';eL.classList.remove('hidden');return}
-  if(await H(lP.value,u.salt)!==u.passwordHash){eL.textContent='رمز اشتباه است';eL.classList.remove('hidden');return}
-  D.setA({id:u.id,name:u.name,username:u.username,role:u.role}); hideAuth(); boot();
+  const email=lU.value.trim().toLowerCase();
+  const {error}=await sb.auth.signInWithPassword({email,password:lP.value});
+  if(error){eL.textContent='ورود ناموفق: '+(error.message||'ایمیل یا رمز عبور نادرست است');eL.classList.remove('hidden');return;}
+  try{await loadCloudData();hideAuth();boot();}catch(err){eL.textContent=err.message||'خطا در دریافت اطلاعات حساب';eL.classList.remove('hidden');}
 };
 fR.onsubmit=async e=>{
   e.preventDefault(); eR.classList.add('hidden');
-  if(rP.value!==rP2.value){eR.textContent='رمزها یکسان نیست';eR.classList.remove('hidden');return}
-  const username=rU.value.trim().toLowerCase();
-  if(D.U().find(x=>x.username===username)){eR.textContent='نام کاربری تکراری';eR.classList.remove('hidden');return}
-  const s=uid(),u={id:uid(),name:rN.value.trim(),username,salt:s,passwordHash:await H(rP.value,s),role:'STUDENT',active:1,createdAt:new Date().toISOString()};
-  const all=D.U(); all.push(u); D.sU(all);
-  D.setA({id:u.id,name:u.name,username:u.username,role:u.role}); hideAuth(); boot(); toast('ثبت‌نام موفق');
+  if(rP.value!==rP2.value){eR.textContent='رمزها یکسان نیست';eR.classList.remove('hidden');return;}
+  const username=rU.value.trim().toLowerCase(), email=rEmail.value.trim().toLowerCase();
+  if(!/^[a-z0-9_]{3,20}$/.test(username)){eR.textContent='نام کاربری باید ۳ تا ۲۰ نویسه انگلیسی، عدد یا زیرخط باشد';eR.classList.remove('hidden');return;}
+  const {data,error}=await sb.auth.signUp({email,password:rP.value,options:{data:{username,full_name:rN.value.trim()}}});
+  if(error){eR.textContent='ثبت‌نام ناموفق: '+error.message;eR.classList.remove('hidden');return;}
+  if(data.session){
+    try{await loadCloudData();hideAuth();boot();toast('ثبت‌نام موفق');}
+    catch(err){eR.textContent=err.message||'حساب ایجاد شد اما دریافت پروفایل ناموفق بود';eR.classList.remove('hidden');}
+  }else{
+    eR.textContent='حساب ایجاد شد. ایمیل تأیید را باز کنید و پس از تأیید، با ایمیل و رمز وارد شوید.';eR.classList.remove('hidden');
+  }
 };
-function logout(){D.clr();localStorage.removeItem('hsS');app.classList.add('hidden');landing.classList.remove('hidden');refreshLandingStats()}
-function boot(){
+async function logout(){await sb.auth.signOut();D.clr();localStorage.removeItem('hsS');cloudReady=false;app.classList.add('hidden');landing.classList.remove('hidden');refreshLandingStats();}
+async function boot(){
+  if(!me()){showAuth('l');return;}
   landing.classList.add('hidden'); app.classList.remove('hidden');
-  lg2.innerHTML=LOGO; who.innerHTML=`<span class='panel-chip'>${adm()?'👑 مدیر':'🎓 داوطلب'}</span> <span>${me().name}</span>`;
+  lg2.innerHTML=LOGO; who.innerHTML=`<span class='panel-chip'>${adm()?'👑 مدیر':'🎓 داوطلب'}</span> <span>${esc(me().name)}</span>`;
   const items=adm()
     ?[['h','داشبورد'],['q','بانک'],['e','آزمون‌ها'],['notes','جزوات'],['t','شرکت'],['r','نتایج'],['lb','رتبه'],['n','اطلاعیه'],['u','کاربران'],['st','تنظیمات']]
     :[['h','داشبورد'],['t','آزمون'],['notes','جزوات'],['r','نتایج'],['lb','رتبه'],['n','اطلاعیه'],['st','پروفایل']];
@@ -477,9 +645,10 @@ function boot(){
     +`<a class="navb" href="https://t.me/hesabdar_speed" target="_blank">تلگرام</a>`
     +`<button class="navb" onclick="logout()">خروج</button>`;
   nav.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
-  const p=sessionStorage.getItem('pend'); if(p){sessionStorage.removeItem('pend');go('t');if(confirm('آزمون لینک‌شده — شروع؟'))start(p);return}
+  const p=sessionStorage.getItem('pend'); if(p){sessionStorage.removeItem('pend');go('t');if(confirm('آزمون لینک‌شده — شروع؟'))start(p);return;}
   go('h');
 }
+
 function go(v){
   if(!adm()&&['q','e','u'].includes(v))v='h';
   nav.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
@@ -730,7 +899,7 @@ function viewH(){
       <div class="space-y-2">
         ${recent.length?recent.map(r=>`<div class="flex justify-between gap-2 items-center p-3 rounded-xl border" style="border-color:var(--line)">
           <div class="text-sm"><b>${esc(r.studentName)}</b><div class="text-[11px] text-slate-500">${esc(r.examTitle)}</div></div>
-          <div class="text-left"><div class="font-black ${r.percent>=pass?'text-teal-700':'text-red-500'}">${r.percent}٪</div><div class="text-[10px] text-slate-400">${fmtJalali(r.finishedAt)}</div></div>
+          <div class="text-left"><div class="font-black ${r.percent>=(r.passPercent??pass)?'text-teal-700':'text-red-500'}">${r.percent}٪</div><div class="text-[10px] text-slate-400">${fmtJalali(r.finishedAt)}</div></div>
         </div>`).join(''):'<div class="text-slate-400 text-sm py-6 text-center">هنوز نتیجه‌ای ثبت نشده</div>'}
       </div>
     </div>
@@ -749,7 +918,7 @@ function viewQ(){
   if(!adm())return;
   const list=[...D.Q()].reverse();
   main.innerHTML=`<div class="grid lg:grid-cols-3 gap-5">
-    <div class="card p-5"><h3 class="font-bold mb-3">سؤال جدید</h3>
+    <div class="card p-5"><h3 class="font-bold mb-3">سؤال جدید</h3>${(LEGACY_LOCAL.questions.length||LEGACY_LOCAL.exams.length)?`<button type="button" class="btn-gold w-full text-xs mb-3" onclick="if(confirm('سؤالات و آزمون‌های ذخیره‌شده در همین مرورگر به حساب مدیر منتقل شوند؟ نتایج و حساب‌های قدیمی منتقل نمی‌شوند.'))migrateLegacyData()">انتقال داده‌های قدیمی این مرورگر به سرور</button>`:``}
       <form id="fq" class="space-y-2">
         <input id="qb" required placeholder="درس"><input id="qm" placeholder="پودمان">
         <textarea id="qt" required rows="5" placeholder="متن سؤال (بدون محدودیت تعداد کلمات)" style="min-height:120px"></textarea>
@@ -780,7 +949,7 @@ function viewQ(){
         <button class="text-red-500 text-xs mt-2" onclick="D.sQ(D.Q().filter(x=>x.id!=='${q.id}'));viewQ()">حذف</button>
       </div>`).join('')||'<div class="p-10 text-center text-slate-400">خالی</div>'}</div>
     </div></div>`;
-  fq.onsubmit=e=>{e.preventDefault();const qs=D.Q();qs.push({id:uid(),book:qb.value.trim(),module:qm.value.trim(),text:qt.value.trim(),opts:[qa.value.trim(),qbb.value.trim(),qc.value.trim(),qd.value.trim()],correct:qk.value,difficulty:qf.value});D.sQ(qs);toast('ذخیره شد');viewQ()};
+  fq.onsubmit=async e=>{e.preventDefault();const qs=D.Q();qs.push({id:uid(),book:qb.value.trim(),module:qm.value.trim(),text:qt.value.trim(),opts:[qa.value.trim(),qbb.value.trim(),qc.value.trim(),qd.value.trim()],correct:qk.value,difficulty:qf.value,published:true});D.sQ(qs);await new Promise(r=>setTimeout(r,500));toast('ذخیره در سرور انجام شد');viewQ()};
 }
 
 function viewE(){
@@ -823,7 +992,7 @@ function viewE(){
           <div class="text-sm font-bold mb-2" style="color:var(--g)">نوع دسترسی آزمون</div>
           <div class="flex flex-wrap gap-4 mb-2 text-sm">
             <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="eAccess" id="eFree" value="free" checked> رایگان</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="eAccess" id="ePaid" value="paid"> پولی</label>
+            <label class="flex items-center gap-2 cursor-not-allowed opacity-50"><input type="radio" name="eAccess" id="ePaid" value="paid" disabled> پولی (پس از اتصال درگاه پرداخت)</label>
           </div>
           <div id="paidBox" class="hidden space-y-2">
             <div><label>مبلغ (تومان)</label><input id="ePrice" type="number" min="0" placeholder="مثال: 50000"></div>
@@ -927,9 +1096,8 @@ function viewE(){
     e.preventDefault();
     const ids=[...document.querySelectorAll('.eq:checked')].map(c=>c.value);
     if(!ids.length)return alert('حداقل یک سؤال انتخاب کنید');
-    const paid=document.getElementById('ePaid')?.checked||false;
-    const price=paid?(+document.getElementById('ePrice')?.value||0):0;
-    if(paid&&price<=0)return alert('برای آزمون پولی، مبلغ را وارد کنید');
+    const paid=false;
+    const price=0;
     const startAt=parseJalaliInput(es.value);
     const endAt=parseJalaliInput(ee.value);
     if(es.value.trim()&&!startAt) return alert('تاریخ شروع شمسی نامعتبر است. مثال: 1403/08/15 09:00');
@@ -945,20 +1113,17 @@ function viewE(){
       passPercent:+(document.getElementById('ePass')?.value||50),
       questionIds:ids,startAt,endAt,paid,price,createdAt:new Date().toISOString()
     });
-    D.sE(all);toast('آزمون ثبت شد');viewE();
+    D.sE(all);toast('در حال ذخیره آزمون در سرور...');setTimeout(()=>viewE(),700);
   };
 }
 function shareEx(id){
   const ex=D.E().find(x=>x.id===id);if(!ex)return;
-  const qs=ex.questionIds.map(i=>D.Q().find(q=>q.id===i)).filter(Boolean);
-  const payload={v:1,exam:ex,questions:qs}; const token=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-  const short=ex.code||id.slice(-8); const url=location.href.split('?')[0].split('#')[0]+'#share='+encodeURIComponent(token);
-  const packs=D.packs();packs[short]=payload;D.sPacks(packs);
+  const url=location.href.split('?')[0].split('#')[0]+'#exam='+encodeURIComponent(ex.id);
   shareBox.classList.remove('hidden');
   shareBox.innerHTML=`<div class="card p-4 border border-teal-200 bg-teal-50/40"><div class="font-bold mb-1">${esc(ex.title)}</div>
-    <div class="text-sm mb-2">کد: <b dir="ltr">${short}</b></div>
+    <div class="text-sm mb-2">کد: <b dir="ltr">${ex.id.slice(0,8)}</b></div>
     <textarea id="su" class="text-[11px] font-mono mb-2" dir="ltr" rows="3" style="width:100%;border-radius:10px;padding:8px" readonly>${url}</textarea>
-    <button class="btn text-sm" onclick="navigator.clipboard.writeText(su.value).then(()=>toast('کپی شد'))">کپی لینک</button>
+    <button class="btn text-sm" onclick="navigator.clipboard.writeText(document.getElementById('su').value).then(()=>toast('کپی شد'))">کپی لینک</button>
     <button class="btn-s text-sm" onclick="shareBox.classList.add('hidden')">بستن</button></div>`;
 }
 
@@ -969,7 +1134,7 @@ function viewT(){
     <div class="flex gap-2"><input id="examLinkIn" dir="ltr" placeholder="لینک" style="flex:1"><button class="btn-s text-sm" onclick="enterByPastedLink(examLinkIn.value)">اعمال</button></div></div></div>
   <div class="card overflow-hidden"><div class="p-4 border-b font-bold">آزمون‌ها</div>
     <div class="divide-y">${list.map(ex=>{const st=win(ex),taken=D.R().find(r=>r.userId===uid_&&r.examId===ex.id);
-      const act=taken?`<span class="text-xs bg-stone-100 px-3 py-2 rounded-xl">${taken.percent}٪</span>`:!st.ok?`<span class="badge ${st.c}">${st.t}</span>`:`<button class="btn text-sm" onclick="start('${ex.id}')">شروع</button>`;
+      const act=taken&&!ex.allowRetake?`<span class="text-xs bg-stone-100 px-3 py-2 rounded-xl">${taken.percent}٪</span>`:!st.ok?`<span class="badge ${st.c}">${st.t}</span>`:`<button class="btn text-sm" onclick="start('${ex.id}')">${taken?'شرکت مجدد':'شروع'}</button>`;
       return `<div class="p-4 flex flex-wrap justify-between gap-2 items-center"><div><div class="font-bold">${esc(ex.title)}</div>
         <div class="text-xs text-slate-500">${ex.questionIds.length} سؤال · ${ex.duration} دقیقه${ex.paid?` · <span style="color:#b8891b;font-weight:700">مبلغ: ${toFa(ex.price)} تومان</span>`:' · رایگان'}</div>
         <div class="text-[11px] text-slate-500">شروع: ${fmtJalali(ex.startAt)} · پایان: ${fmtJalali(ex.endAt)}</div>
@@ -978,30 +1143,24 @@ function viewT(){
 }
 
 let S=null,Tm=null;
-function start(id){
-  const ex=D.E().find(x=>x.id===id);if(!ex)return alert('نیست');
+async function start(id){
+  const ex=D.E().find(x=>x.id===id);if(!ex)return alert('آزمون پیدا نشد');
   const st=win(ex);if(!st.ok)return alert(st.t);
   const prev=D.R().find(r=>r.userId===me().id&&r.examId===id);
   if(prev&&!ex.allowRetake)return alert('قبلاً در این آزمون شرکت کرده‌اید و شرکت مجدد مجاز نیست.');
   if(prev&&ex.allowRetake&&!confirm('قبلاً شرکت کرده‌اید. دوباره شرکت می‌کنید؟'))return;
-  if(ex.paid&&ex.price>0){
-    const set=D.settings();
-    const card=set.cardNumber||'5859831119182276';
-    const cardName=set.cardName||'امیرحسین موذن';
-    const paidKey='hsPaid_'+me().id+'_'+ex.id;
-    if(!localStorage.getItem(paidKey)){
-      const msg=`این آزمون پولی است.\n\nمبلغ: ${ex.price.toLocaleString('fa-IR')} تومان\nشماره کارت:\n${card}\nبه نام: ${cardName}\n\nپس از واریز، روی تأیید بزنید.\n(در صورت نیاز رسید را برای پشتیبانی ارسال کنید)`;
-      if(!confirm(msg)) return;
-      if(!confirm('آیا واریز را انجام داده‌اید؟')) return;
-      localStorage.setItem(paidKey,'1');
-      toast('پرداخت ثبت شد — موفق باشید');
-    }
-  }
-  let questions=ex.questionIds.map(i=>D.Q().find(q=>q.id===i)).filter(Boolean);
-  if(ex.shuffle) questions=shuffle(questions);
-  S={examId:ex.id,examTitle:ex.title,userId:me().id,studentName:me().name,questions,answers:{},flags:{},idx:0,negMark:ex.negMark||0,passPercent:ex.passPercent??50,allowBack:ex.allowBack!==false,showResult:ex.showResult!==false,endAt:Date.now()+ex.duration*6e4,warned:false};
-  localStorage.setItem('hsS',JSON.stringify(S)); window.onbeforeunload=()=>'آزمون در جریان است'; runExam();
+  if(ex.paid){return alert('این نسخه هنوز درگاه پرداخت آنلاین ندارد؛ آزمون پولی تا زمان اتصال درگاه غیرفعال است.');}
+  try{
+    const {data,error}=await sb.rpc('start_exam',{p_exam_id:id});
+    if(error)throw error;
+    S={attemptId:data.attempt_id,examId:data.exam.id,examTitle:data.exam.title,userId:me().id,studentName:me().name,
+      questions:data.questions.map(q=>({id:q.id,text:q.text,opts:q.opts})),answers:{},flags:{},idx:0,
+      negMark:Number(data.exam.negMark||0),passPercent:Number(data.exam.passPercent??50),allowBack:data.exam.allowBack!==false,
+      showResult:data.exam.showResult!==false,endAt:new Date(data.deadline_at).getTime(),warned:false};
+    localStorage.setItem('hsS',JSON.stringify(S));window.onbeforeunload=()=>'آزمون در جریان است';runExam();
+  }catch(err){alert(err.message||'شروع آزمون ناموفق بود');}
 }
+
 function runExam(){
   nav.style.visibility='hidden'; if(Tm)clearInterval(Tm);
   Tm=setInterval(()=>{const left=S.endAt-Date.now();if(left<=0){clearInterval(Tm);finish(1);return}
@@ -1032,14 +1191,27 @@ function drawQ(){
 }
 function pick(id,L){S.answers[id]=L;localStorage.setItem('hsS',JSON.stringify(S));drawQ()}
 function flag(){const id=S.questions[S.idx].id;S.flags[id]?delete S.flags[id]:S.flags[id]=1;localStorage.setItem('hsS',JSON.stringify(S));drawQ()}
-function finish(auto){
-  if(Tm)clearInterval(Tm);localStorage.removeItem('hsS');window.onbeforeunload=null;
-  let c=0,w=0,b=0;const details=[];
-  S.questions.forEach(q=>{const a=S.answers[q.id]||null;let st='blank';if(a===q.correct){st='correct';c++}else if(a){st='wrong';w++}else b++;details.push({text:q.text,correct:q.correct,answered:a,status:st})});
-  const total=S.questions.length,raw=c-w*S.negMark,percent=total?+(raw/total*100).toFixed(2):0;
-  const result={id:uid(),examId:S.examId,examTitle:S.examTitle,userId:S.userId,studentName:S.studentName,correct:c,wrong:w,blank:b,total,negMark:S.negMark,passPercent:S.passPercent,rawScore:+raw.toFixed(2),percent,details,finishedAt:new Date().toISOString(),auto};
-  const rs=D.R();rs.push(result);const same=rs.filter(r=>r.examId===result.examId).sort((a,b)=>b.percent-a.percent);let rank=1;same.forEach((r,i)=>{if(i&&r.percent<same[i-1].percent)rank=i+1;r.rank=rank});D.sR(rs);
-  const showRes=S.showResult!==false;S=null;nav.style.visibility='';if(showRes)showCert(result.id);else{toast('آزمون ثبت شد');go('r');}
+async function finish(auto){
+  if(!S)return;
+  if(Tm)clearInterval(Tm);window.onbeforeunload=null;
+  const current=S;const answers={...current.answers};
+  try{
+    const {data,error}=await sb.rpc('submit_exam',{p_attempt_id:current.attemptId,p_answers:answers,p_auto_submitted:!!auto});
+    if(error)throw error;
+    localStorage.removeItem('hsS');
+    const result={id:data.id,examId:data.examId,examTitle:data.examTitle,userId:me().id,studentName:me().name,
+      correct:data.correct,wrong:data.wrong,blank:data.blank,total:data.total,negMark:data.negMark,
+      passPercent:data.passPercent,rawScore:data.rawScore,percent:data.percent,passed:data.passed,
+      details:data.details||[],finishedAt:data.finishedAt,auto:data.auto};
+    const rs=D.R();rs.push(result);const same=rs.filter(r=>r.examId===result.examId).sort((a,b)=>b.percent-a.percent);
+    let rank=1;same.forEach((r,i)=>{if(i&&r.percent<same[i-1].percent)rank=i+1;r.rank=rank;});result.rank=rank;D.s('hsR',rs);
+    const showRes=current.showResult!==false;S=null;nav.style.visibility='';
+    if(showRes)showCert(result.id);else{toast('آزمون با موفقیت ثبت شد');go('r');}
+  }catch(err){
+    if(Tm)clearInterval(Tm);
+    alert('ثبت نهایی آزمون انجام نشد: '+(err.message||'خطای ارتباط با سرور')+'\nپاسخ‌های فعلی روی همین دستگاه حفظ شده‌اند. دوباره «تحویل آزمون» را بزنید.');
+    S=current;localStorage.setItem('hsS',JSON.stringify(S));runExam();
+  }
 }
 
 function viewR(){
@@ -1049,8 +1221,8 @@ function viewR(){
     <button class="btn-s text-xs" onclick="pdfFromHtml('r.pdf','<h2>نتایج</h2>'+D.R().map(r=>'<p>'+esc(r.studentName)+' — '+r.percent+'٪</p>').join(''))">PDF</button></span>`:''}</div>
     <div class="overflow-x-auto"><table><thead><tr><th>داوطلب</th><th>آزمون</th><th>درصد</th><th>وضعیت</th><th>رتبه</th><th></th></tr></thead>
     <tbody>${list.map(r=>`<tr><td>${esc(r.studentName)}</td><td>${esc(r.examTitle)}</td>
-      <td class="font-bold ${r.percent>=pass?'text-teal-700':'text-red-500'}">${r.percent}٪</td>
-      <td>${r.percent>=pass?'قبول':'مردود'}</td><td>${r.rank??'—'}</td>
+      <td class="font-bold ${r.percent>=(r.passPercent??pass)?'text-teal-700':'text-red-500'}">${r.percent}٪</td>
+      <td>${r.percent>=(r.passPercent??pass)?'قبول':'مردود'}</td><td>${r.rank??'—'}</td>
       <td><button class="text-teal-700 text-xs" onclick="showCert('${r.id}')">کارنامه</button></td></tr>`).join('')||'<tr><td colspan="6" class="text-center py-8 text-slate-400">خالی</td></tr>'}</tbody></table></div></div>`;
 }
 function showCert(id){
@@ -1103,13 +1275,13 @@ function viewU(){
     <table><thead><tr><th>نام</th><th>کاربری</th><th>نقش</th><th>وضعیت</th><th></th></tr></thead>
     <tbody>${D.U().map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${u.username}</td><td>${u.role==='ADMIN'?'مدیر':'داوطلب'}</td>
       <td>${u.active?'فعال':'مسدود'}</td>
-      <td>${u.username==='admin'?'':`<button class="text-xs" onclick="(function(){const a=D.U();const x=a.find(z=>z.id==='${u.id}');x.active=x.active?0:1;D.sU(a);viewU()})()">${u.active?'مسدود':'فعال'}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
+      <td>${u.id===me().id?'حساب جاری':`<button class="text-xs" onclick="(function(){const a=D.U();const x=a.find(z=>z.id==='${u.id}');x.active=x.active?0:1;D.sU(a);viewU()})()">${u.active?'مسدود':'فعال'}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function viewST(){
   main.innerHTML=`<div class="grid md:grid-cols-2 gap-4">
     <div class="card p-5"><div class="font-bold mb-3">پروفایل</div>
       <div class="text-sm mb-3">${esc(me().name)} · <span dir="ltr">${esc(me().username)}</span></div>
-      <form id="fp" class="space-y-2"><input id="p1" type="password" required minlength="4" placeholder="رمز جدید"><input id="p2" type="password" required placeholder="تکرار"><button class="btn text-sm">تغییر رمز</button></form></div>
+      <form id="fp" class="space-y-2"><input id="p1" type="password" required minlength="8" placeholder="رمز جدید"><input id="p2" type="password" required placeholder="تکرار"><button class="btn text-sm">تغییر رمز</button></form></div>
     <div class="card p-5"><div class="font-bold mb-3">تلگرام رسمی</div>
       <a class="btn-gold block text-center mb-2" href="https://t.me/hesabdar_speed" target="_blank">کانال @hesabdar_speed</a>
       <a class="btn-s block text-center" href="https://t.me/hesabdaranspeed1" target="_blank">گروه پرسش و پاسخ</a>
@@ -1124,57 +1296,37 @@ function viewST(){
         <button class="btn text-sm" onclick="D.sSettings({...D.settings(),passPercent:+sp.value||50,cardNumber:scard.value.trim(),cardName:scname.value.trim()});toast('ذخیره شد')">ذخیره تنظیمات</button>
       </div>`:''}
     </div></div>`;
-  fp.onsubmit=async e=>{e.preventDefault();if(p1.value!==p2.value)return alert('یکسان نیست');const users=D.U();const u=users.find(x=>x.id===me().id);u.salt=uid();u.passwordHash=await H(p1.value,u.salt);D.sU(users);toast('رمز عوض شد')};
+  fp.onsubmit=async e=>{e.preventDefault();if(p1.value!==p2.value)return alert('یکسان نیست');const {error}=await sb.auth.updateUser({password:p1.value});if(error)return alert(error.message);toast('رمز عبور تغییر کرد')};
 }
 
 
 /* ===== NOTES / جزوات (IndexedDB) ===== */
 const NotesDB = {
-  db: null,
-  async open(){
-    if(this.db) return this.db;
-    this.db = await new Promise((resolve,reject)=>{
-      const req=indexedDB.open('hesabdarspeed_notes',1);
-      req.onupgradeneeded=e=>{const db=e.target.result; if(!db.objectStoreNames.contains('files')) db.createObjectStore('files',{keyPath:'id'});};
-      req.onsuccess=e=>resolve(e.target.result);
-      req.onerror=e=>reject(e.target.error);
-    });
-    return this.db;
-  },
+  bucket:'hesabdarspeed-notes',
   async all(){
-    const db=await this.open();
-    return new Promise((resolve,reject)=>{
-      const tx=db.transaction('files','readonly');
-      const req=tx.objectStore('files').getAll();
-      req.onsuccess=()=>resolve((req.result||[]).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')));
-      req.onerror=()=>reject(req.error);
-    });
+    const {data,error}=await sb.from('notes').select('*').order('created_at',{ascending:false});
+    if(error)throw error;
+    return (data||[]).map(n=>({id:n.id,title:n.title,category:n.category,desc:n.description,name:n.file_name,type:n.mime_type?.includes('pdf')?'PDF':'تصویر',mime:n.mime_type,size:n.file_size,storagePath:n.storage_path,createdAt:n.created_at,by:n.created_by_name}));
   },
-  async put(item){
-    const db=await this.open();
-    return new Promise((resolve,reject)=>{
-      const tx=db.transaction('files','readwrite');
-      tx.objectStore('files').put(item);
-      tx.oncomplete=()=>resolve(true);
-      tx.onerror=()=>reject(tx.error);
-    });
-  },
-  async del(id){
-    const db=await this.open();
-    return new Promise((resolve,reject)=>{
-      const tx=db.transaction('files','readwrite');
-      tx.objectStore('files').delete(id);
-      tx.oncomplete=()=>resolve(true);
-      tx.onerror=()=>reject(tx.error);
-    });
+  async putFile(file,meta){
+    const id=uid(),ext=(file.name.split('.').pop()||'bin').replace(/[^a-z0-9]/gi,'').toLowerCase();
+    const path=`${id}.${ext}`;
+    const {error:upErr}=await sb.storage.from(this.bucket).upload(path,file,{contentType:file.type||'application/octet-stream',upsert:false});
+    if(upErr)throw upErr;
+    const {error:dbErr}=await sb.from('notes').insert({id,title:meta.title,category:meta.category,description:meta.desc,file_name:file.name,mime_type:file.type||'application/octet-stream',file_size:file.size,storage_path:path,created_by:me().id,created_by_name:me().name});
+    if(dbErr){await sb.storage.from(this.bucket).remove([path]);throw dbErr;}
+    return id;
   },
   async get(id){
-    const db=await this.open();
-    return new Promise((resolve,reject)=>{
-      const req=db.transaction('files','readonly').objectStore('files').get(id);
-      req.onsuccess=()=>resolve(req.result);
-      req.onerror=()=>reject(req.error);
-    });
+    const {data,error}=await sb.from('notes').select('*').eq('id',id).single();if(error)throw error;
+    const {data:urlData,error:urlErr}=await sb.storage.from(this.bucket).createSignedUrl(data.storage_path,300);
+    if(urlErr)throw urlErr;
+    return {...data,url:urlData.signedUrl};
+  },
+  async del(id){
+    const {data,error}=await sb.from('notes').select('storage_path').eq('id',id).single();if(error)throw error;
+    const {error:storageErr}=await sb.storage.from(this.bucket).remove([data.storage_path]);if(storageErr)throw storageErr;
+    const {error:dbErr}=await sb.from('notes').delete().eq('id',id);if(dbErr)throw dbErr;
   }
 };
 
@@ -1238,26 +1390,11 @@ async function viewNotes(){
       document.getElementById('nProg').classList.remove('hidden');
       document.getElementById('nBtn').disabled=true;
       try{
-        const buf=await file.arrayBuffer();
-        const bytes=new Uint8Array(buf);
-        // store as base64 chunks-friendly
-        let binary=''; const chunk=0x8000;
-        for(let i=0;i<bytes.length;i+=chunk) binary+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk));
-        const base64=btoa(binary);
-        const item={
-          id:uid(),
+        await NotesDB.putFile(file,{
           title:nTitle.value.trim(),
           category:(nCat.value||'').trim(),
-          desc:(nDesc.value||'').trim(),
-          name:file.name,
-          type:isPdf?'PDF':(file.type||'image'),
-          mime:file.type||(isPdf?'application/pdf':'image/jpeg'),
-          size:file.size,
-          data:base64,
-          createdAt:new Date().toISOString(),
-          by:me().name
-        };
-        await NotesDB.put(item);
+          desc:(nDesc.value||'').trim()
+        });
         toast('جزوه ذخیره شد');
         viewNotes();
       }catch(err){
@@ -1273,47 +1410,46 @@ async function viewNotes(){
 async function openNote(id){
   try{
     const n=await NotesDB.get(id);
-    if(!n||!n.data) return alert('فایل یافت نشد');
-    const bin=atob(n.data);
-    const arr=new Uint8Array(bin.length);
-    for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
-    const blob=new Blob([arr],{type:n.mime||'application/octet-stream'});
-    const url=URL.createObjectURL(blob);
-    // open in new tab
-    const w=window.open(url,'_blank');
-    if(!w){
-      // fallback download
-      const a=document.createElement('a'); a.href=url; a.download=n.name||n.title||'note'; a.click();
-    }
-    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+    if(!n||!n.url) return alert('فایل یافت نشد');
+    const w=window.open(n.url,'_blank','noopener');
+    if(!w){const a=document.createElement('a');a.href=n.url;a.download=n.file_name||n.title||'note';a.click();}
   }catch(e){console.error(e);alert('خطا در باز کردن فایل')}
 }
 
 async function deleteNote(id){
   if(!confirm('حذف این جزوه؟')) return;
-  await NotesDB.del(id);
+  try{await NotesDB.del(id);}catch(e){return alert(e.message||'حذف ناموفق بود');}
   toast('حذف شد');
   viewNotes();
 }
 
 
-function applyPack(data){const qs=D.Q();(data.questions||[]).forEach(q=>{if(!qs.find(x=>x.id===q.id))qs.push(q)});D.sQ(qs);const es=D.E();if(!es.find(e=>e.id===data.exam.id))es.push(data.exam);D.sE(es);if(data.exam.code){const p=D.packs();p[data.exam.code]=data;D.sPacks(p)}}
 function importShare(){
-  let token=null;const hash=location.hash||'';
-  if(hash.startsWith('#share=')) token=decodeURIComponent(hash.slice(7));
-  if(!token)return null;
-  try{const data=JSON.parse(decodeURIComponent(escape(atob(token))));applyPack(data);return data.exam.id}catch{return null}
+  const hash=location.hash||'';
+  if(hash.startsWith('#exam=')) return decodeURIComponent(hash.slice(6));
+  if(hash.startsWith('#share=')){history.replaceState({},'',location.pathname);alert('لینک قدیمی آزمون غیرفعال شد. برای امنیت، لینک جدید را از مدیر دریافت کنید.');}
+  return null;
 }
-function enterByCode(code){code=(code||'').trim();const data=D.packs()[code];if(data){applyPack(data);start(data.exam.id);return}const ex=D.E().find(e=>e.code===code);if(ex)start(ex.id);else alert('کد یافت نشد')}
-function enterByPastedLink(raw){raw=(raw||'').trim();let token=null;try{if(raw.includes('#share='))token=decodeURIComponent(raw.split('#share=')[1].split('&')[0]);else if(/^[A-Za-z0-9+/=]+$/.test(raw))token=raw}catch{}if(!token)return alert('نامعتبر');
-  try{const data=JSON.parse(decodeURIComponent(escape(atob(token))));applyPack(data);go('t');if(confirm('شروع؟'))start(data.exam.id)}catch{alert('خطا')}}
+function enterByCode(code){
+  code=(code||'').trim();const ex=D.E().find(e=>e.id===code||e.id.slice(0,8).toLowerCase()===code.toLowerCase());
+  if(ex)start(ex.id);else alert('کد آزمون یافت نشد.');
+}
+function enterByPastedLink(raw){
+  raw=(raw||'').trim();let id=null;
+  try{if(raw.includes('#exam='))id=decodeURIComponent(raw.split('#exam=')[1].split('&')[0]);}catch{}
+  if(id){go('t');start(id);}else alert('لینک معتبر آزمون وارد کنید.');
+}
 
 (async()=>{
-  await seed(); refreshLandingStats();
+  refreshLandingStats();
   const shared=importShare();
-  if(me()){boot();if(shared){history.replaceState({},'',location.pathname);if(confirm('آزمون لینک‌شده — شروع؟'))start(shared)}
-    else{try{const raw=localStorage.getItem('hsS');if(raw){const p=JSON.parse(raw);if(p.userId===me().id&&p.endAt>Date.now()&&confirm('ادامه آزمون؟')){S=p;runExam()}}}catch{}}
-  }else if(shared){sessionStorage.setItem('pend',shared);showAuth('l');alert('برای شرکت وارد شوید')}
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){await loadCloudData();boot();
+      if(shared){history.replaceState({},'',location.pathname);if(confirm('آزمون لینک‌شده — شروع؟'))start(shared);}
+      else{try{const raw=localStorage.getItem('hsS');if(raw){const p=JSON.parse(raw);if(p.userId===me().id&&p.endAt>Date.now()&&confirm('ادامه آزمون؟')){S=p;runExam();}}}catch{}}
+    }else if(shared){sessionStorage.setItem('pend',shared);showAuth('l');alert('برای شرکت ابتدا وارد شوید.');}
+  }catch(err){console.error(err);toast('اتصال به پایگاه داده برقرار نشد. تنظیمات Supabase را بررسی کنید.');}
 })();
 </script>
 </body>
