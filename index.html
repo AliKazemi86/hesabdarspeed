@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HESABDARSPEED | مجموعه تخصصی آموزش و آزمون حسابداری</title>
+<meta name="description" content="آزمون و آموزش حسابداری — کنکور کاردانی، کارشناسی ارشد، دکتری و استخدامی">
+<meta name="theme-color" content="#0a3d32">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#06261f; --g:#0a3d32; --g2:#0f766e; --gold:#c9a227; --cream:#f6f3ea; --paper:#fffcf7; --line:#d9e5df;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--cream);color:#13251f;min-height:100vh}
+.brand-font{font-family:'Outfit',sans-serif;font-weight:800;letter-spacing:.06em}
+.bg-mesh{background:
+  radial-gradient(1200px 600px at 100% -10%, rgba(201,162,39,.18), transparent 50%),
+  radial-gradient(900px 500px at -10% 20%, rgba(15,118,110,.14), transparent 45%),
+  linear-gradient(180deg,#f6f3ea 0%,#eef5f1 40%,#f6f3ea 100%)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px rgba(6,38,31,.08)}
+.btn{background:linear-gradient(135deg,#0a3d32,#0f766e);color:#fff;border:0;border-radius:14px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(10,61,50,.2)}
+.btn:hover{filter:brightness(1.06)}
+.btn-gold{background:linear-gradient(135deg,#b8891b,#e0c36a);color:#1a1405;border:0;border-radius:14px;padding:12px 20px;font:inherit;font-weight:800;cursor:pointer}
+.btn-s{background:#fff;color:var(--g);border:1px solid var(--line);border-radius:14px;padding:11px 16px;font:inherit;cursor:pointer}
+.btn-d{background:#b91c1c;color:#fff;border:0;border-radius:12px;padding:8px 14px;font:inherit;cursor:pointer}
+.brand-bar{background:linear-gradient(120deg,#06261f 0%,#0a3d32 40%,#0f4c45 70%,#1e293b 100%);color:#fff}
+.logo{width:54px;height:54px;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 13px;font:inherit;font-size:14px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--g2);box-shadow:0 0 0 3px rgba(15,118,110,.15)}
+label{display:block;font-size:12px;color:#64748b;margin:0 0 5px}
+.navb{background:transparent;border:0;color:#fff;padding:8px 12px;border-radius:11px;cursor:pointer;font:inherit;font-size:13px}
+.navb.on,.navb:hover{background:rgba(255,255,255,.14)}
+.opt{display:flex;gap:12px;padding:14px;border:1px solid #e5e7eb;border-radius:14px;cursor:pointer;direction:rtl;text-align:right}
+.opt.on{border-color:#0f766e;background:#f0fdfa}
+.opt input{width:18px;height:18px;margin-top:3px;flex-shrink:0}
+.qnav{width:36px;height:36px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;font-size:12px;cursor:pointer}
+.qnav.a{background:var(--g);color:#fff;border-color:var(--g)}
+.qnav.f{background:var(--gold);color:#fff;border-color:var(--gold)}
+.qnav.c{outline:2px solid #1e293b}
+.badge{font-size:11px;padding:3px 9px;border-radius:999px;display:inline-block}
+.hidden{display:none!important}
+table{border-collapse:collapse;width:100%}
+th,td{padding:10px 12px;border-bottom:1px solid #e7e5e4;text-align:right;font-size:13px}
+th{background:#f5f5f4;color:#57534e}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#06261f;color:#fff;padding:12px 18px;border-radius:14px;z-index:99;font-size:13px}
+.icon-tile{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#fff,#eef7f3);border:1px solid var(--line);box-shadow:0 10px 24px rgba(10,61,50,.08)}
+.service-card{transition:transform .2s,box-shadow .2s}
+.service-card:hover{transform:translateY(-4px);box-shadow:0 22px 40px rgba(10,61,50,.12)}
+.tg-card{background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 50%,#0369a1 100%);color:#fff;border-radius:24px}
+.progress{height:8px;background:#e7e5e4;border-radius:99px;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,#0a3d32,#0f766e)}
+@media print{.no-print{display:none!important}}
+.topnav{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.topnav .navb{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.topnav .navb.on{background:#c9a227;color:#1a1405;border-color:#c9a227;font-weight:800}
+.dash-hero{position:relative;overflow:hidden}
+.dash-hero:after{content:"";position:absolute;inset:-40% -20% auto auto;width:280px;height:280px;background:radial-gradient(circle,rgba(201,162,39,.25),transparent 70%);pointer-events:none}
+.stat-pro{background:linear-gradient(145deg,#fff,#f4faf7);border:1px solid var(--line);border-radius:20px;padding:18px;position:relative;overflow:hidden}
+.stat-pro:before{content:"";position:absolute;top:0;right:0;width:4px;height:100%;background:linear-gradient(180deg,#0a3d32,#c9a227)}
+.panel-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:11px}
+</style>
+</head>
+<body class="bg-mesh">
+<!-- ========== PUBLIC LANDING ========== -->
+<div id="landing">
+  <header class="brand-bar sticky top-0 z-50 no-print">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="logo" id="lgLand"></div>
+        <div>
+          <div class="brand-font text-lg md:text-xl">HESABDARSPEED</div>
+          <div class="text-[11px] text-white/65">مجموعه تخصصی حسابداری · امیرحسین موذن</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button class="btn-s !py-2 !text-sm" onclick="showAuth('l')">ورود</button>
+        <button class="btn-gold !py-2 !text-sm" onclick="showAuth('r')">ثبت‌نام داوطلب</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="max-w-6xl mx-auto px-4 pt-10 pb-8">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full mb-4" style="background:rgba(201,162,39,.15);color:#8a6a12">
+          <span>✦</span> آموزش · آزمون · موفقیت در حسابداری
+        </div>
+        <h1 class="text-3xl md:text-4xl font-black leading-[1.7] mb-4" style="color:var(--ink)">
+          مرجع تخصصی آزمون و آمادگی
+          <span style="color:var(--g2)">حسابداری</span>
+        </h1>
+        <p class="text-slate-600 leading-8 mb-6 text-[15px]">
+          از کنکور کاردانی تا دکتری و آزمون‌های استخدامی — با بانک سؤال استاندارد، آزمون زمان‌دار، کارنامه تحلیلی و جامعه فعال حسابداران.
+        </p>
+        <div class="flex flex-wrap gap-3 mb-6">
+          <button class="btn" onclick="showAuth('r')">شروع رایگان</button>
+          <a class="btn-s" href="#services">حوزه‌های فعالیت</a>
+          <a class="btn-gold" href="#community">عضویت در تلگرام</a>
+        </div>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <div class="card px-4 py-3"><div class="text-xl font-black" style="color:var(--g)" id="visitorsStat">—</div><div class="text-xs text-slate-500">بازدید از سایت</div></div>
+          <div class="card px-4 py-3"><div class="text-xl font-black" style="color:var(--g)" id="usersStat">—</div><div class="text-xs text-slate-500">کاربر ثبت‌نامی</div></div>
+          <div class="card px-4 py-3"><div class="text-xl font-black" style="color:var(--g)" id="examsStat">—</div><div class="text-xs text-slate-500">آزمون برگزارشده</div></div>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="card p-6 overflow-hidden">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="icon-tile text-3xl">🧮</div>
+            <div class="icon-tile text-3xl">📊</div>
+            <div class="icon-tile text-3xl">📒</div>
+            <div class="icon-tile text-3xl">💼</div>
+          </div>
+          <div class="mt-5 p-4 rounded-2xl" style="background:linear-gradient(135deg,#0a3d32,#134e4a);color:#fff">
+            <div class="brand-font text-sm tracking-widest text-white/60 mb-1">HESABDARSPEED</div>
+            <div class="font-bold text-lg mb-1">ماشین حساب موفقیت شما</div>
+            <div class="text-sm text-white/80 leading-7">تمرین، آزمون آزمایشی، تحلیل کارنامه و مسیر قبولی در همه مقاطع حسابداری</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="max-w-6xl mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+      <div class="brand-font text-xs tracking-[0.25em] mb-2" style="color:var(--g2)">SERVICES</div>
+      <h2 class="text-2xl font-black" style="color:var(--ink)">فعال در همه حوزه‌های حسابداری</h2>
+      <p class="text-slate-500 text-sm mt-2">از پایه تا دکتری و بازار کار</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="card p-5 service-card"><div class="text-3xl mb-3">🎓</div><div class="font-bold mb-2">کنکور کاردانی حسابداری</div><div class="text-xs text-slate-500 leading-6">آمادگی کامل با آزمون‌های استاندارد</div></div>
+      <div class="card p-5 service-card"><div class="text-3xl mb-3">📚</div><div class="font-bold mb-2">کارشناسی و ارشد حسابداری</div><div class="text-xs text-slate-500 leading-6">بانک سؤال تخصصی و شبیه‌سازی آزمون</div></div>
+      <div class="card p-5 service-card"><div class="text-3xl mb-3">🏛️</div><div class="font-bold mb-2">دکتری حسابداری</div><div class="text-xs text-slate-500 leading-6">تمرین سطح پیشرفته و تحلیل عملکرد</div></div>
+      <div class="card p-5 service-card"><div class="text-3xl mb-3">🧾</div><div class="font-bold mb-2">آزمون‌های استخدامی</div><div class="text-xs text-slate-500 leading-6">آمادگی برای دستگاه‌ها و سازمان‌ها</div></div>
+    </div>
+  </section>
+
+  <section id="community" class="max-w-6xl mx-auto px-4 py-8">
+    <div class="tg-card p-6 md:p-8 shadow-xl">
+      <div class="grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <div class="text-sm text-white/70 mb-2">جامعه حسابداران سرعت</div>
+          <h2 class="text-2xl font-black mb-3">همین حالا عضو شو</h2>
+          <p class="text-white/90 text-sm leading-8 mb-5">
+            اخبار، نمونه سؤال، رفع اشکال و همراهی داوطلبان حسابداری — در کانال و گروه رسمی HESABDARSPEED.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a class="btn-gold" href="https://t.me/hesabdar_speed" target="_blank" rel="noopener">کانال تلگرام @hesabdar_speed</a>
+            <a class="btn-s" href="https://t.me/hesabdaranspeed1" target="_blank" rel="noopener">گروه پرسش و پاسخ</a>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur rounded-2xl p-5 border border-white/20">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">✈️</div>
+            <div>
+              <div class="font-bold">@hesabdar_speed</div>
+              <div class="text-xs text-white/70">کانال رسمی آموزش حسابداری</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">💬</div>
+            <div>
+              <div class="font-bold">گروه پرسش و پاسخ</div>
+              <div class="text-xs text-white/70">t.me/hesabdaranspeed1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="card p-6">
+        <h3 class="font-black text-lg mb-4" style="color:var(--ink)">نظرات داوطلبان</h3>
+        <div id="commentsList" class="space-y-3 max-h-72 overflow-y-auto mb-4"></div>
+        <form id="commentForm" class="space-y-2 border-t pt-4">
+          <div class="grid grid-cols-2 gap-2">
+            <input id="cName" required placeholder="نام شما">
+            <select id="cRate"><option value="5">★★★★★</option><option value="4">★★★★</option><option value="3">★★★</option><option value="2">★★</option><option value="1">★</option></select>
+          </div>
+          <textarea id="cText" required rows="3" placeholder="نظر شما درباره HESABDARSPEED..."></textarea>
+          <button class="btn text-sm">ثبت نظر</button>
+        </form>
+      </div>
+      <div class="card p-6">
+        <h3 class="font-black text-lg mb-3" style="color:var(--ink)">چرا HESABDARSPEED؟</h3>
+        <ul class="space-y-3 text-sm text-slate-600">
+          <li class="flex gap-2"><span>📗</span><span>بانک سؤال و دفترچه استاندارد با خروجی PDF و Word</span></li>
+          <li class="flex gap-2"><span>⏱️</span><span>آزمون زمان‌دار با نمره منفی و کارنامه تحلیلی</span></li>
+          <li class="flex gap-2"><span>🏆</span><span>رتبه‌بندی و پیگیری پیشرفت داوطلب</span></li>
+          <li class="flex gap-2"><span>🎯</span><span>پوشش کنکور کاردانی، ارشد، دکتری و استخدامی</span></li>
+          <li class="flex gap-2"><span>👥</span><span>پشتیبانی جامعه تلگرامی حسابداران سرعت</span></li>
+        </ul>
+        <div class="mt-6 p-4 rounded-2xl" style="background:linear-gradient(135deg,#f8f4e8,#fff);border:1px solid #e8d9a8">
+          <div class="text-xs text-amber-800 mb-1">مالک و بنیان‌گذار</div>
+          <div class="font-black text-lg" style="color:var(--ink)">امیرحسین موذن</div>
+          <div class="text-xs text-slate-500 mt-1">تلاش برای سرعت بخشیدن به یادگیری حسابداری</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t mt-6 no-print" style="border-color:var(--line);background:rgba(255,252,247,.9)">
+    <div class="max-w-6xl mx-auto px-4 py-8 grid md:grid-cols-3 gap-6 text-sm">
+      <div>
+        <div class="brand-font text-base mb-2" style="color:var(--g)">HESABDARSPEED</div>
+        <p class="text-slate-500 text-xs leading-7">مجموعه تخصصی آموزش و آزمون حسابداری — امیرحسین موذن</p>
+      </div>
+      <div>
+        <div class="font-bold mb-2">ارتباط</div>
+        <a class="block text-sky-700 text-xs mb-1" href="https://t.me/hesabdar_speed" target="_blank">کانال: @hesabdar_speed</a>
+        <a class="block text-sky-700 text-xs" href="https://t.me/hesabdaranspeed1" target="_blank">گروه: hesabdaranspeed1</a>
+      </div>
+      <div>
+        <div class="font-bold mb-2">حوزه‌ها</div>
+        <div class="text-xs text-slate-500 leading-7">کاردانی · کارشناسی · ارشد · دکتری · استخدامی</div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ========== AUTH MODAL ========== -->
+<div id="authModal" class="hidden fixed inset-0 z-[80] flex items-center justify-center p-4" style="background:rgba(6,38,31,.55);backdrop-filter:blur(4px)">
+  <div class="card w-full max-w-md p-7 relative">
+    <button class="absolute left-4 top-4 text-slate-400" onclick="hideAuth()">✕</button>
+    <div class="text-center mb-5">
+      <div class="logo mx-auto mb-3" id="lgAuth"></div>
+      <div class="brand-font text-2xl" style="color:var(--g)">HESABDARSPEED</div>
+      <div class="text-xs text-slate-500 mt-1">ورود به سامانه آزمون</div>
+    </div>
+    <div class="flex bg-stone-100 rounded-xl p-1 mb-4 text-sm">
+      <button type="button" class="flex-1 py-2 rounded-lg bg-white shadow font-bold" id="bL" onclick="tab('l')">ورود</button>
+      <button type="button" class="flex-1 py-2 rounded-lg text-slate-500" id="bR" onclick="tab('r')">ثبت‌نام</button>
+    </div>
+    <form id="fL" class="space-y-3">
+      <div><label>نام کاربری</label><input id="lU" required dir="ltr"></div>
+      <div><label>رمز عبور</label><input id="lP" type="password" required minlength="4"></div>
+      <div id="eL" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3"></div>
+      <button class="btn w-full">ورود</button>
+    </form>
+    <form id="fR" class="space-y-3 hidden">
+      <div><label>نام و نام خانوادگی</label><input id="rN" required></div>
+      <div><label>نام کاربری</label><input id="rU" required pattern="[A-Za-z0-9_]{3,20}" dir="ltr"></div>
+      <div><label>رمز عبور</label><input id="rP" type="password" required minlength="4"></div>
+      <div><label>تکرار رمز</label><input id="rP2" type="password" required></div>
+      <div id="eR" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3"></div>
+      <button class="btn w-full">ایجاد حساب داوطلب</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== APP ========== -->
+<div id="app" class="hidden min-h-screen flex flex-col">
+  <header class="brand-bar sticky top-0 z-50 no-print">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="logo" id="lg2"></div>
+        <div>
+          <div class="brand-font text-lg">HESABDARSPEED</div>
+          <div class="text-[11px] text-white/65" id="who"></div>
+        </div>
+      </div>
+      <nav id="nav" class="topnav"></nav>
+    </div>
+  </header>
+  <main id="main" class="flex-1 max-w-6xl w-full mx-auto px-4 py-6"></main>
+  <footer class="no-print border-t text-center text-xs text-slate-500 py-5" style="border-color:var(--line);background:rgba(255,252,247,.95)">
+    <div class="brand-font mb-1" style="color:var(--g)">HESABDARSPEED</div>
+    <div>امیرحسین موذن · 
+      <a class="text-sky-700" href="https://t.me/hesabdar_speed" target="_blank">@hesabdar_speed</a> · 
+      <a class="text-sky-700" href="https://t.me/hesabdaranspeed1" target="_blank">گروه پرسش و پاسخ</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+const LOGO=`<svg viewBox="0 0 64 64" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a3d32"/><stop offset="100%" stop-color="#1e293b"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#g)"/><rect x="12" y="14" width="40" height="36" rx="4" fill="#f8fafc"/><rect x="16" y="20" width="22" height="3" rx="1" fill="#0a3d32"/><rect x="16" y="27" width="32" height="2" rx="1" fill="#94a3b8"/><rect x="16" y="33" width="28" height="2" rx="1" fill="#94a3b8"/><rect x="16" y="39" width="20" height="2" rx="1" fill="#94a3b8"/><circle cx="44" cy="42" r="8" fill="#c9a227"/><path d="M40.5 42.5l2.2 2.2 4.5-5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+['lgLand','lgAuth'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=LOGO});
+
+const D={
+  g:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
+  s:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+  U:()=>D.g('hsU',[]),sU:v=>D.s('hsU',v),
+  Q:()=>D.g('hsQ',[]),sQ:v=>D.s('hsQ',v),
+  E:()=>D.g('hsE',[]),sE:v=>D.s('hsE',v),
+  R:()=>D.g('hsR',[]),sR:v=>D.s('hsR',v),
+  N:()=>D.g('hsN',[]),sN:v=>D.s('hsN',v),
+  C:()=>D.g('hsC',[]),sC:v=>D.s('hsC',v),
+  A:()=>D.g('hsA',null),setA:v=>D.s('hsA',v),clr:()=>localStorage.removeItem('hsA'),
+  packs:()=>D.g('hsPacks',{}),sPacks:v=>D.s('hsPacks',v),
+  settings:()=>D.g('hsSet',{shuffle:true,passPercent:50,cardNumber:'5859831119182276',cardName:'امیرحسین موذن'}),
+  sSettings:v=>D.s('hsSet',v),
+  visits:()=>D.g('hsVisits',{count:0,last:null})
+};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const toFa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const toEn=n=>String(n).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+// Jalali conversion (minimal)
+function _jy2g(jy,jm,jd){
+  const g_days=[0,31,59,90,120,151,181,212,243,273,304,334];
+  let gy,gm,gd,days;
+  jy=+jy;jm=+jm;jd=+jd;
+  const jy2=jy-979, jm2=jm-1, jd2=jd-1;
+  let j_day_no=365*jy2+Math.floor(jy2/33)*8+Math.floor(((jy2%33)+3)/4);
+  for(let i=0;i<jm2;++i) j_day_no+=(i<6?31:30);
+  j_day_no+=jd2;
+  let g_day_no=j_day_no+79;
+  gy=1600+400*Math.floor(g_day_no/146097); g_day_no%=146097;
+  let leap=true;
+  if(g_day_no>=36525){g_day_no--;gy+=100*Math.floor(g_day_no/36524);g_day_no%=36524;if(g_day_no>=365)g_day_no++;else leap=false}
+  gy+=4*Math.floor(g_day_no/1461);g_day_no%=1461;
+  if(g_day_no>=366){leap=false;g_day_no--;gy+=Math.floor(g_day_no/365);g_day_no%=365}
+  for(gm=0;gm<11&&g_day_no>=g_days[gm+1]+((gm===1&&leap)?1:0);gm++);
+  gd=g_day_no-g_days[gm]-((gm>1&&leap)?1:0)+1; gm+=1;
+  return [gy,gm,gd];
+}
+function _g2jy(gy,gm,gd){
+  const g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
+  gy=+gy;gm=+gm;gd=+gd;
+  let gy2=gy-1600, gm2=gm-1, gd2=gd-1;
+  let g_day_no=365*gy2+Math.floor((gy2+3)/4)-Math.floor((gy2+99)/100)+Math.floor((gy2+399)/400);
+  for(let i=0;i<gm2;++i) g_day_no+=[31,28,31,30,31,30,31,31,30,31,30,31][i];
+  if(gm2>1&&((gy%4===0&&gy%100!==0)||gy%400===0)) g_day_no++;
+  g_day_no+=gd2;
+  let j_day_no=g_day_no-79;
+  const j_np=Math.floor(j_day_no/12053); j_day_no%=12053;
+  let jy=979+33*j_np+4*Math.floor(j_day_no/1461); j_day_no%=1461;
+  if(j_day_no>=366){jy+=Math.floor((j_day_no-1)/365);j_day_no=(j_day_no-1)%365}
+  let jm,i;
+  for(i=0;i<11&&j_day_no>=(i<6?31:30);i++) j_day_no-=(i<6?31:30);
+  jm=i+1; const jd=j_day_no+1;
+  return [jy,jm,jd];
+}
+function fmtJalali(iso){
+  if(!iso) return '—';
+  try{
+    const d=new Date(iso);
+    const [jy,jm,jd]=_g2jy(d.getFullYear(),d.getMonth()+1,d.getDate());
+    const hh=String(d.getHours()).padStart(2,'0'), mm=String(d.getMinutes()).padStart(2,'0');
+    return toFa(`${jy}/${String(jm).padStart(2,'0')}/${String(jd).padStart(2,'0')} ${hh}:${mm}`);
+  }catch{return '—'}
+}
+function parseJalaliInput(str){
+  // expect 1403/08/15 14:30 or 1403-08-15 14:30
+  if(!str||!String(str).trim()) return null;
+  const s=toEn(String(str).trim()).replace(/-/g,'/');
+  const m=s.match(/^(\d{3,4})\/(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2}))?$/);
+  if(!m) return null;
+  const [jy,jm,jd]=[ +m[1],+m[2],+m[3] ];
+  const hh=+(m[4]||0), mi=+(m[5]||0);
+  const [gy,gm,gd]=_jy2g(jy,jm,jd);
+  const dt=new Date(gy,gm-1,gd,hh,mi,0);
+  if(isNaN(dt.getTime())) return null;
+  return dt.toISOString();
+}
+
+async function H(p,s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s+':'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+const me=()=>D.A(); const adm=()=>me()?.role==='ADMIN';
+function fmt(iso){if(!iso)return'—';try{return new Date(iso).toLocaleString('fa-IR')}catch{return'—'}}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2400)}
+function shuffle(a){const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function win(ex){
+  const n=Date.now(),s=ex.startAt?+new Date(ex.startAt):null,e=ex.endAt?+new Date(ex.endAt):null;
+  if(s&&n<s)return{ok:0,t:'شروع‌نشده',c:'bg-amber-50 text-amber-700',d:fmtJalali(ex.startAt)};
+  if(e&&n>e)return{ok:0,t:'بسته‌شده',c:'bg-red-50 text-red-600',d:fmtJalali(ex.endAt)};
+  return{ok:1,t:'باز',c:'bg-teal-50 text-teal-700',d:e?'تا '+fmtJalali(ex.endAt):'بدون مهلت'};
+}
+
+function trackVisit(){
+  const v=D.visits();
+  const day=new Date().toDateString();
+  if(v.last!==day){v.count=(v.count||0)+1;v.last=day;D.s('hsVisits',v)}
+  // also total hits
+  const hits=D.g('hsHits',0)+1; D.s('hsHits',hits);
+  return {visits:v.count,hits};
+}
+function refreshLandingStats(){
+  const {visits,hits}=trackVisit();
+  visitorsStat.textContent=toFa(hits);
+  usersStat.textContent=toFa(D.U().filter(u=>u.role!=='ADMIN').length);
+  examsStat.textContent=toFa(D.R().length);
+  renderComments();
+}
+function renderComments(){
+  const list=[...D.C()].reverse().slice(0,20);
+  const isAdm=!!(me()&&me().role==='ADMIN');
+  commentsList.innerHTML=list.length?list.map(c=>`<div class="p-3 rounded-2xl border" style="border-color:var(--line);background:#fff">
+    <div class="flex justify-between gap-2 mb-1">
+      <b class="text-sm">${esc(c.name)}</b>
+      <span class="text-amber-500 text-xs">${'★'.repeat(c.rate)}${'☆'.repeat(5-c.rate)}</span>
+    </div>
+    <div class="text-xs text-slate-600 leading-6">${esc(c.text)}</div>
+    <div class="flex justify-between items-center mt-1">
+      <div class="text-[10px] text-slate-400">${fmt(c.at)}</div>
+      ${isAdm?`<button type="button" class="text-[11px] text-red-500" onclick="deleteComment('${c.id}')">حذف نظر</button>`:''}
+    </div>
+  </div>`).join(''):'<div class="text-sm text-slate-400">هنوز نظری ثبت نشده — اولین نفر باشید.</div>';
+}
+function deleteComment(id){
+  if(!me()||me().role!=='ADMIN') return alert('فقط مدیر می‌تواند نظر را حذف کند');
+  if(!confirm('این نظر حذف شود؟')) return;
+  D.sC(D.C().filter(c=>c.id!==id));
+  toast('نظر حذف شد');
+  renderComments();
+}
+
+commentForm.onsubmit=e=>{
+  e.preventDefault();
+  const arr=D.C();
+  arr.push({id:uid(),name:cName.value.trim(),text:cText.value.trim(),rate:+cRate.value||5,at:new Date().toISOString()});
+  D.sC(arr); cName.value=''; cText.value=''; toast('نظر شما ثبت شد'); renderComments();
+};
+
+async function seed(){
+  let u=D.U();
+  if(!u.find(x=>x.username==='admin')){
+    const s=uid();
+    u.push({id:'admin',name:'امیرحسین موذن',username:'admin',salt:s,passwordHash:await H('Admin@1234',s),role:'ADMIN',active:1,createdAt:new Date().toISOString()});
+    D.sU(u);
+  }
+  if(!D.Q().length){
+    D.sQ([
+      {id:uid(),book:'حسابداری پایه',module:'مفاهیم',text:'معادله اساسی حسابداری کدام است؟',opts:['دارایی = بدهی + سرمایه','دارایی = هزینه','بدهی = درآمد','سرمایه = فروش'],correct:'الف',difficulty:'آسان'},
+      {id:uid(),book:'خرید و فروش',module:'ثبت',text:'فاکتور خرید کالا معمولاً در کدام حساب ثبت می‌شود؟',opts:['خرید کالا','فروش کالا','سرمایه','اسناد پرداختنی فقط'],correct:'الف',difficulty:'متوسط'},
+      {id:uid(),book:'وجوه نقد',module:'صندوق',text:'موجودی صندوق در ترازنامه در کدام گروه است؟',opts:['دارایی جاری','بدهی جاری','حقوق مالکانه','درآمد'],correct:'الف',difficulty:'آسان'},
+      {id:uid(),book:'اسناد تجاری',module:'چک',text:'چک مدت‌دار دریافتنی در کدام حساب منعکس می‌شود؟',opts:['اسناد دریافتنی','اسناد پرداختنی','صندوق','سرمایه'],correct:'الف',difficulty:'متوسط'},
+      {id:uid(),book:'حسابداری',module:'استهلاک',text:'استهلاک دارایی ثابت چه نوع حسابی است؟',opts:['هزینه','دارایی','بدهی','سرمایه'],correct:'الف',difficulty:'متوسط'},
+    ]);
+  }
+  if(!D.C().length){
+    D.sC([
+      {id:uid(),name:'سارا محمدی',text:'برای کنکور کاردانی حسابداری خیلی کمکم کرد. کارنامه و آزمون زمان‌دار عالی بود.',rate:5,at:new Date().toISOString()},
+      {id:uid(),name:'رضا احمدی',text:'بانک سؤال و خروجی PDF دفترچه برای تدریس کلاس‌ها عالیه.',rate:5,at:new Date().toISOString()},
+    ]);
+  }
+  if(!D.N().length){
+    D.sN([{id:uid(),title:'به HESABDARSPEED خوش آمدید',body:'کانال تلگرام @hesabdar_speed و گروه پرسش و پاسخ را از دست ندهید.',at:new Date().toISOString(),by:'سیستم'}]);
+  }
+}
+
+function showAuth(t){authModal.classList.remove('hidden');tab(t||'l')}
+function hideAuth(){authModal.classList.add('hidden')}
+function tab(t){
+  fL.classList.toggle('hidden',t!=='l'); fR.classList.toggle('hidden',t!=='r');
+  bL.className='flex-1 py-2 rounded-lg '+(t==='l'?'bg-white shadow font-bold':'text-slate-500');
+  bR.className='flex-1 py-2 rounded-lg '+(t==='r'?'bg-white shadow font-bold':'text-slate-500');
+}
+fL.onsubmit=async e=>{
+  e.preventDefault(); eL.classList.add('hidden');
+  const id=lU.value.trim().toLowerCase();
+  const u=D.U().find(x=>x.username===id&&x.active);
+  if(!u){eL.textContent='کاربر یافت نشد';eL.classList.remove('hidden');return}
+  if(await H(lP.value,u.salt)!==u.passwordHash){eL.textContent='رمز اشتباه است';eL.classList.remove('hidden');return}
+  D.setA({id:u.id,name:u.name,username:u.username,role:u.role}); hideAuth(); boot();
+};
+fR.onsubmit=async e=>{
+  e.preventDefault(); eR.classList.add('hidden');
+  if(rP.value!==rP2.value){eR.textContent='رمزها یکسان نیست';eR.classList.remove('hidden');return}
+  const username=rU.value.trim().toLowerCase();
+  if(D.U().find(x=>x.username===username)){eR.textContent='نام کاربری تکراری';eR.classList.remove('hidden');return}
+  const s=uid(),u={id:uid(),name:rN.value.trim(),username,salt:s,passwordHash:await H(rP.value,s),role:'STUDENT',active:1,createdAt:new Date().toISOString()};
+  const all=D.U(); all.push(u); D.sU(all);
+  D.setA({id:u.id,name:u.name,username:u.username,role:u.role}); hideAuth(); boot(); toast('ثبت‌نام موفق');
+};
+function logout(){D.clr();localStorage.removeItem('hsS');app.classList.add('hidden');landing.classList.remove('hidden');refreshLandingStats()}
+function boot(){
+  landing.classList.add('hidden'); app.classList.remove('hidden');
+  lg2.innerHTML=LOGO; who.innerHTML=`<span class='panel-chip'>${adm()?'👑 مدیر':'🎓 داوطلب'}</span> <span>${me().name}</span>`;
+  const items=adm()
+    ?[['h','داشبورد'],['q','بانک'],['e','آزمون‌ها'],['notes','جزوات'],['t','شرکت'],['r','نتایج'],['lb','رتبه'],['n','اطلاعیه'],['u','کاربران'],['st','تنظیمات']]
+    :[['h','داشبورد'],['t','آزمون'],['notes','جزوات'],['r','نتایج'],['lb','رتبه'],['n','اطلاعیه'],['st','پروفایل']];
+  nav.innerHTML=items.map(([v,l])=>`<button class="navb" data-v="${v}">${l}</button>`).join('')
+    +`<a class="navb" href="https://t.me/hesabdar_speed" target="_blank">تلگرام</a>`
+    +`<button class="navb" onclick="logout()">خروج</button>`;
+  nav.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
+  const p=sessionStorage.getItem('pend'); if(p){sessionStorage.removeItem('pend');go('t');if(confirm('آزمون لینک‌شده — شروع؟'))start(p);return}
+  go('h');
+}
+function go(v){
+  if(!adm()&&['q','e','u'].includes(v))v='h';
+  nav.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  ({h:viewH,q:viewQ,e:viewE,t:viewT,r:viewR,u:viewU,lb:viewLB,n:viewN,st:viewST,notes:viewNotes}[v]||viewH)();
+}
+
+/* exports simplified */
+function pdfFromHtml(filename,body){
+  const w=window.open('','_blank'); if(!w)return alert('Pop-up را فعال کنید');
+  w.document.write(`<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><title>${esc(filename)}</title>
+  <style>@page{size:A4;margin:12mm}body{margin:0;font-family:Tahoma;direction:rtl;text-align:right}
+  .tb{position:sticky;top:0;background:#0a3d32;color:#fff;padding:12px;display:flex;justify-content:space-between}
+  .tb button{background:#fff;color:#0a3d32;border:0;border-radius:8px;padding:8px 12px;font-weight:bold}
+  @media print{.tb{display:none}}.c{padding:16px}</style></head>
+  <body><div class="tb no-print"><b>چاپ / ذخیره PDF</b><button onclick="print()">چاپ</button></div><div class="c">${body}</div></body></html>`);
+  w.document.close();
+}
+function wordDownload(filename,body){
+  const content=`<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>body{font-family:Tahoma;direction:rtl}</style></head><body>${body}</body></html>`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+content],{type:'application/msword'}));a.download=filename.endsWith('.doc')?filename:filename+'.doc';a.click();
+}
+function csvDownload(filename,rows){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(c=>`"${String(c??'').replace(/"/g,'""')}"`).join(',')).join('\n')],{type:'text/csv'}));a.download=filename;a.click();
+}
+
+function bookletHTML(exam){
+  const qs=exam.questionIds.map(id=>D.Q().find(q=>q.id===id)).filter(Boolean);
+  const course=[...new Set(qs.map(q=>q.book).filter(Boolean))].join(' / ')||'—';
+  const today=new Date().toLocaleDateString('fa-IR');
+  const L=['الف','ب','ج','د'];
+  let rows='';
+  qs.forEach((q,i)=>{
+    rows += `
+    <tr>
+      <td style="border:1px solid #1a1a1a;padding:10px 6px;text-align:center;vertical-align:top;width:48px;font-weight:bold;background:#f3f7f5;">${toFa(i+1)}</td>
+      <td style="border:1px solid #1a1a1a;padding:10px 12px;vertical-align:top;">
+        <div style="font-weight:bold;line-height:2;margin-bottom:8px;font-size:12.5px;">${esc(q.text)}</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr>
+            <td style="width:50%;padding:3px 4px;vertical-align:top;line-height:1.9;"><b>الف)</b> ${esc(q.opts[0])}</td>
+            <td style="width:50%;padding:3px 4px;vertical-align:top;line-height:1.9;"><b>ب)</b> ${esc(q.opts[1])}</td>
+          </tr>
+          <tr>
+            <td style="padding:3px 4px;vertical-align:top;line-height:1.9;"><b>ج)</b> ${esc(q.opts[2])}</td>
+            <td style="padding:3px 4px;vertical-align:top;line-height:1.9;"><b>د)</b> ${esc(q.opts[3])}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>`;
+  });
+  return `
+  <div style="direction:rtl;text-align:right;font-family:Tahoma,'Segoe UI',Arial,sans-serif;color:#111;width:100%;">
+    <!-- سربرگ رسمی -->
+    <table style="width:100%;border-collapse:collapse;border:2.5px solid #0a3d32;margin-bottom:0;">
+      <tr>
+        <td style="width:90px;border-left:1px solid #0a3d32;padding:10px;text-align:center;vertical-align:middle;background:#0a3d32;">
+          <div style="width:64px;height:64px;margin:0 auto;background:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 64 64" width="54" height="54" xmlns="http://www.w3.org/2000/svg">
+              <rect width="64" height="64" rx="14" fill="#0a3d32"/>
+              <rect x="12" y="14" width="40" height="36" rx="4" fill="#f8fafc"/>
+              <rect x="16" y="20" width="22" height="3" rx="1" fill="#0a3d32"/>
+              <rect x="16" y="27" width="32" height="2" rx="1" fill="#94a3b8"/>
+              <rect x="16" y="33" width="28" height="2" rx="1" fill="#94a3b8"/>
+              <circle cx="44" cy="42" r="8" fill="#c9a227"/>
+              <path d="M40.5 42.5l2.2 2.2 4.5-5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </td>
+        <td style="padding:10px 14px;vertical-align:middle;background:linear-gradient(180deg,#ffffff,#f3f7f5);">
+          <div style="font-size:18px;font-weight:900;color:#0a3d32;letter-spacing:1px;">HESABDARSPEED</div>
+          <div style="font-size:12px;color:#333;margin-top:3px;">مجموعه تخصصی آموزش و آزمون حسابداری</div>
+          <div style="font-size:11px;color:#555;margin-top:4px;">مالک: امیرحسین موذن &nbsp;|&nbsp; کانال تلگرام: <b dir="ltr">@hesabdar_speed</b></div>
+          <div style="font-size:11px;color:#555;">گروه پرسش و پاسخ: <b dir="ltr">t.me/hesabdaranspeed1</b></div>
+        </td>
+        <td style="width:120px;border-right:1px solid #0a3d32;padding:8px;text-align:center;vertical-align:middle;background:#0a3d32;color:#fff;">
+          <div style="font-size:10px;opacity:.85;">دفترچه سؤالات</div>
+          <div style="font-size:13px;font-weight:bold;margin-top:4px;">آزمون حسابداری</div>
+          <div style="font-size:10px;margin-top:6px;opacity:.8;">${today}</div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- مشخصات آزمون -->
+    <table style="width:100%;border-collapse:collapse;border:1.5px solid #0a3d32;border-top:0;margin-bottom:10px;font-size:11.5px;">
+      <tr>
+        <td style="border:1px solid #333;background:#e8f0ec;padding:7px 8px;font-weight:bold;width:16%;">عنوان آزمون</td>
+        <td style="border:1px solid #333;padding:7px 8px;" colspan="3">${esc(exam.title||'—')}</td>
+      </tr>
+      <tr>
+        <td style="border:1px solid #333;background:#e8f0ec;padding:7px 8px;font-weight:bold;">نام درس</td>
+        <td style="border:1px solid #333;padding:7px 8px;">${esc(course)}</td>
+        <td style="border:1px solid #333;background:#e8f0ec;padding:7px 8px;font-weight:bold;width:14%;">مدت</td>
+        <td style="border:1px solid #333;padding:7px 8px;width:18%;">${toFa(exam.duration)} دقیقه</td>
+      </tr>
+      <tr>
+        <td style="border:1px solid #333;background:#e8f0ec;padding:7px 8px;font-weight:bold;">تعداد سؤالات</td>
+        <td style="border:1px solid #333;padding:7px 8px;">${toFa(qs.length)}</td>
+        <td style="border:1px solid #333;background:#e8f0ec;padding:7px 8px;font-weight:bold;">نمره منفی</td>
+        <td style="border:1px solid #333;padding:7px 8px;">${exam.negMark??'—'}</td>
+      </tr>
+    </table>
+
+    <!-- مشخصات داوطلب -->
+    <table style="width:100%;border-collapse:collapse;border:1px dashed #555;margin-bottom:12px;font-size:12px;">
+      <tr>
+        <td style="padding:8px;width:50%;">نام و نام خانوادگی: ..............................</td>
+        <td style="padding:8px;">شماره داوطلبی: ..............................</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;">نام کاربری: ..............................</td>
+        <td style="padding:8px;">امضا: ..............................</td>
+      </tr>
+    </table>
+
+    <div style="font-size:11px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-bottom:12px;line-height:1.9;">
+      <b>تذکرات:</b> به هر سؤال فقط یک پاسخ دهید. پاسخ خود را در پاسخنامه علامت بزنید.
+      ${Number(exam.negMark)>0?' نمره منفی فعال است.':' نمره منفی ندارد.'}
+      استفاده از ماشین‌حساب تنها در صورت اعلام مجاز است.
+    </div>
+
+    <!-- جدول سؤالات -->
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="background:#0a3d32;color:#fff;">
+          <th style="border:1px solid #0a3d32;padding:9px 6px;width:48px;">ردیف</th>
+          <th style="border:1px solid #0a3d32;padding:9px 10px;">شرح سؤال و گزینه‌ها</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+
+    <div style="margin-top:18px;border-top:2px solid #0a3d32;padding-top:8px;text-align:center;font-size:10px;color:#444;">
+      HESABDARSPEED &nbsp;|&nbsp; @hesabdar_speed &nbsp;|&nbsp; امیرحسین موذن &nbsp;|&nbsp; صفحه ویژه داوطلب
+    </div>
+  </div>`;
+}
+function keyHTML(exam){
+  const qs=exam.questionIds.map(id=>D.Q().find(q=>q.id===id)).filter(Boolean);
+  const today=new Date().toLocaleDateString('fa-IR');
+  const L=['الف','ب','ج','د'];
+  // advanced answer grid like bubble sheet style using table
+  let grid='';
+  for(let i=0;i<qs.length;i+=10){
+    const chunk=qs.slice(i,i+10);
+    grid += `<table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-size:12px;">
+      <tr style="background:#0a3d32;color:#fff;">
+        <th style="border:1px solid #0a3d32;padding:7px;width:12%;">شماره</th>
+        <th style="border:1px solid #0a3d32;padding:7px;">الف</th>
+        <th style="border:1px solid #0a3d32;padding:7px;">ب</th>
+        <th style="border:1px solid #0a3d32;padding:7px;">ج</th>
+        <th style="border:1px solid #0a3d32;padding:7px;">د</th>
+        <th style="border:1px solid #0a3d32;padding:7px;width:18%;">پاسخ صحیح</th>
+        <th style="border:1px solid #0a3d32;padding:7px;">درس</th>
+      </tr>`;
+    chunk.forEach((q,idx)=>{
+      const n=i+idx+1;
+      grid += `<tr>
+        <td style="border:1px solid #333;padding:8px;text-align:center;font-weight:bold;background:#f3f7f5;">${toFa(n)}</td>
+        ${L.map(x=>`<td style="border:1px solid #333;padding:8px;text-align:center;${q.correct===x?'background:#c9a227;color:#111;font-weight:bold;':''}">${q.correct===x?'●':'○'}</td>`).join('')}
+        <td style="border:1px solid #333;padding:8px;text-align:center;font-weight:bold;color:#0a3d32;">${q.correct}</td>
+        <td style="border:1px solid #333;padding:8px;text-align:center;font-size:11px;">${esc(q.book||'—')}</td>
+      </tr>`;
+    });
+    grid += `</table>`;
+  }
+  return `
+  <div style="direction:rtl;text-align:right;font-family:Tahoma,'Segoe UI',Arial,sans-serif;color:#111;width:100%;">
+    <table style="width:100%;border-collapse:collapse;border:2.5px solid #0a3d32;margin-bottom:12px;">
+      <tr>
+        <td style="width:80px;background:#0a3d32;padding:10px;text-align:center;">
+          <div style="width:56px;height:56px;margin:0 auto;background:#fff;border-radius:12px;line-height:56px;font-size:22px;">🔑</div>
+        </td>
+        <td style="padding:12px;background:#f8faf9;">
+          <div style="font-size:18px;font-weight:900;color:#0a3d32;">پاسخنامه رسمی آزمون</div>
+          <div style="font-size:12px;margin-top:4px;">HESABDARSPEED &nbsp;|&nbsp; @hesabdar_speed &nbsp;|&nbsp; امیرحسین موذن</div>
+          <div style="font-size:12px;margin-top:4px;"><b>عنوان:</b> ${esc(exam.title||'—')} &nbsp;|&nbsp; تاریخ: ${today} &nbsp;|&nbsp; تعداد: ${toFa(qs.length)}</div>
+        </td>
+      </tr>
+    </table>
+    <div style="background:#fff3cd;border:1px solid #e0c36a;color:#6b4f0b;padding:8px 10px;margin-bottom:12px;font-size:11px;border-radius:6px;">
+      ویژه مصحح و مدیر سامانه — از انتشار کلید برای داوطلب قبل از پایان مهلت خودداری شود.
+    </div>
+    ${grid}
+    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:8px;">
+      <tr>
+        <td style="border:1px solid #333;padding:8px;width:25%;background:#f3f7f5;font-weight:bold;">تعداد کل</td>
+        <td style="border:1px solid #333;padding:8px;">${toFa(qs.length)}</td>
+        <td style="border:1px solid #333;padding:8px;background:#f3f7f5;font-weight:bold;">نمره منفی</td>
+        <td style="border:1px solid #333;padding:8px;">${exam.negMark??'—'}</td>
+      </tr>
+    </table>
+    <div style="margin-top:16px;text-align:center;font-size:10px;color:#666;border-top:1px solid #ccc;padding-top:8px;">
+      HESABDARSPEED Answer Key · کانال @hesabdar_speed · گروه t.me/hesabdaranspeed1
+    </div>
+  </div>`;
+}
+function certHTML(r){
+  const pass=r.passPercent??D.settings().passPercent??50; const ok=r.percent>=pass;
+  return `<div style="direction:rtl;font-family:Tahoma"><div style="background:#0a3d32;color:#fff;text-align:center;padding:12px"><b>کارنامه HESABDARSPEED</b></div>
+  <p>داوطلب: <b>${esc(r.studentName)}</b> | آزمون: <b>${esc(r.examTitle)}</b> | درصد: <b>${r.percent}٪</b> | ${ok?'قبول':'مردود'}</p>
+  ${r.details.map((d,i)=>`<div style="border:1px solid #ddd;padding:6px;margin:4px 0;font-size:12px">${toFa(i+1)}. ${esc(d.text)} | شما: ${d.answered||'—'} | صحیح: ${d.correct}</div>`).join('')}</div>`;
+}
+
+function viewH(){
+  let rs=D.R(); if(!adm())rs=rs.filter(x=>x.userId===me().id);
+  const avg=rs.length?(rs.reduce((a,x)=>a+x.percent,0)/rs.length).toFixed(1):'0';
+  const pass=D.settings().passPercent||50;
+  const hits=D.g('hsHits',0);
+  const openEx=D.E().filter(ex=>win(ex).ok).length;
+  const recent=rs.slice().reverse().slice(0,5);
+  main.innerHTML=`
+  <div class="brand-bar dash-hero rounded-3xl p-6 md:p-8 mb-5 shadow-lg">
+    <div class="relative z-10">
+      <div class="flex flex-wrap justify-between gap-3 items-start mb-4">
+        <div>
+          <div class="brand-font text-[11px] tracking-[0.28em] text-white/50 mb-1">HESABDARSPEED PANEL</div>
+          <h2 class="text-2xl md:text-3xl font-black mb-1">سلام، ${esc(me().name)}</h2>
+          <p class="text-white/75 text-sm">${adm()?'مرکز مدیریت آزمون، جزوه، نتایج و درآمدزایی':'میز کار داوطلب — آزمون، جزوه، رتبه و کارنامه'}</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="panel-chip">بازدید: ${toFa(hits)}</span>
+          <span class="panel-chip">آزمون باز: ${toFa(openEx)}</span>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        ${adm()?`<button class="btn !bg-white !text-teal-900" onclick="go('q')">بانک سؤال</button>
+        <button class="btn-gold" onclick="go('e')">ساخت آزمون</button>
+        <button class="btn" style="background:rgba(255,255,255,.14)" onclick="go('notes')">جزوات</button>`
+        :`<button class="btn-gold" onclick="go('t')">شرکت در آزمون</button>
+        <button class="btn" style="background:rgba(255,255,255,.14)" onclick="go('notes')">جزوات</button>`}
+        <a class="btn" style="background:rgba(255,255,255,.14)" href="https://t.me/hesabdar_speed" target="_blank">تلگرام</a>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+    ${[
+      ['بازدید کل',toFa(hits),'👁️'],
+      ['سؤالات',toFa(D.Q().length),'📝'],
+      ['نتایج',toFa(rs.length),'📊'],
+      ['میانگین',avg+'٪','🎯']
+    ].map(([l,v,i])=>`<div class="stat-pro"><div class="text-xl mb-1">${i}</div><div class="text-2xl font-black" style="color:var(--g)">${v}</div><div class="text-xs text-slate-500 mt-1">${l}</div></div>`).join('')}
+  </div>
+  <div class="grid lg:grid-cols-3 gap-4">
+    <div class="card p-5 lg:col-span-2">
+      <div class="flex justify-between items-center mb-3"><div class="font-bold">آخرین نتایج</div><button class="text-xs text-teal-700" onclick="go('r')">همه</button></div>
+      <div class="space-y-2">
+        ${recent.length?recent.map(r=>`<div class="flex justify-between gap-2 items-center p-3 rounded-xl border" style="border-color:var(--line)">
+          <div class="text-sm"><b>${esc(r.studentName)}</b><div class="text-[11px] text-slate-500">${esc(r.examTitle)}</div></div>
+          <div class="text-left"><div class="font-black ${r.percent>=pass?'text-teal-700':'text-red-500'}">${r.percent}٪</div><div class="text-[10px] text-slate-400">${fmtJalali(r.finishedAt)}</div></div>
+        </div>`).join(''):'<div class="text-slate-400 text-sm py-6 text-center">هنوز نتیجه‌ای ثبت نشده</div>'}
+      </div>
+    </div>
+    <div class="card p-5">
+      <div class="font-bold mb-3">دسترسی سریع</div>
+      <div class="space-y-2 text-sm">
+        <button class="btn-s w-full text-right" onclick="go('lb')">🏆 رتبه‌بندی</button>
+        <button class="btn-s w-full text-right" onclick="go('n')">📢 اطلاعیه‌ها</button>
+        ${adm()?'<button class="btn-s w-full text-right" onclick="go(\'u\')">👥 کاربران</button><button class="btn-s w-full text-right" onclick="go(\'st\')">⚙️ تنظیمات و کارت واریز</button>':''}
+        <a class="btn-s w-full text-right block" href="https://t.me/hesabdaranspeed1" target="_blank">💬 گروه پرسش و پاسخ</a>
+      </div>
+    </div>
+  </div>`;
+}
+function viewQ(){
+  if(!adm())return;
+  const list=[...D.Q()].reverse();
+  main.innerHTML=`<div class="grid lg:grid-cols-3 gap-5">
+    <div class="card p-5"><h3 class="font-bold mb-3">سؤال جدید</h3>
+      <form id="fq" class="space-y-2">
+        <input id="qb" required placeholder="درس"><input id="qm" placeholder="پودمان">
+        <textarea id="qt" required rows="5" placeholder="متن سؤال (بدون محدودیت تعداد کلمات)" style="min-height:120px"></textarea>
+        <textarea id="qa" required rows="2" placeholder="گزینه الف (متن کامل)"></textarea>
+        <textarea id="qbb" required rows="2" placeholder="گزینه ب (متن کامل)"></textarea>
+        <textarea id="qc" required rows="2" placeholder="گزینه ج (متن کامل)"></textarea>
+        <textarea id="qd" required rows="2" placeholder="گزینه د (متن کامل)"></textarea>
+        <p class="text-[11px] text-slate-500">هیچ محدودیت کلمه‌ای برای صورت سؤال و گزینه‌ها وجود ندارد.</p>
+        <div class="grid grid-cols-2 gap-2">
+          <select id="qk" required><option value="">پاسخ</option><option>الف</option><option>ب</option><option>ج</option><option>د</option></select>
+          <select id="qf"><option>آسان</option><option selected>متوسط</option><option>سخت</option><option>خیلی سخت</option></select>
+        </div>
+        <button class="btn w-full">ذخیره</button>
+      </form></div>
+    <div class="lg:col-span-2 card overflow-hidden">
+      <div class="p-3 border-b flex justify-between"><b>${list.length} سؤال</b>
+        <span class="flex gap-2"><button class="btn-s text-xs" onclick="pdfFromHtml('bank.pdf',bookletHTML({title:'بانک سؤالات',duration:'—',questionIds:D.Q().map(q=>q.id),negMark:0}))">PDF</button>
+        <button class="btn-s text-xs" onclick="wordDownload('bank.doc',bookletHTML({title:'بانک سؤالات',duration:'—',questionIds:D.Q().map(q=>q.id),negMark:0}))">Word</button></span></div>
+      <div class="divide-y max-h-[70vh] overflow-y-auto">${list.map(q=>`<div class="p-3">
+        <div class="text-[11px] text-teal-700">${esc(q.book)} · ${q.difficulty} · ${q.correct}</div>
+        <div class="text-sm font-semibold whitespace-pre-wrap leading-7">${esc(q.text)}</div>
+        <div class="text-xs text-slate-600 mt-2 space-y-1 whitespace-pre-wrap">
+          <div>الف) ${esc(q.opts[0])}</div>
+          <div>ب) ${esc(q.opts[1])}</div>
+          <div>ج) ${esc(q.opts[2])}</div>
+          <div>د) ${esc(q.opts[3])}</div>
+        </div>
+        <button class="text-red-500 text-xs mt-2" onclick="D.sQ(D.Q().filter(x=>x.id!=='${q.id}'));viewQ()">حذف</button>
+      </div>`).join('')||'<div class="p-10 text-center text-slate-400">خالی</div>'}</div>
+    </div></div>`;
+  fq.onsubmit=e=>{e.preventDefault();const qs=D.Q();qs.push({id:uid(),book:qb.value.trim(),module:qm.value.trim(),text:qt.value.trim(),opts:[qa.value.trim(),qbb.value.trim(),qc.value.trim(),qd.value.trim()],correct:qk.value,difficulty:qf.value});D.sQ(qs);toast('ذخیره شد');viewQ()};
+}
+
+function viewE(){
+  if(!adm())return;
+  const qs=D.Q(), exams=[...D.E()].reverse();
+  const books=[...new Set(qs.map(q=>q.book).filter(Boolean))];
+  const fBook=window._eqBook||'';
+  const fText=window._eqText||'';
+  let filtered=qs.slice();
+  if(fBook) filtered=filtered.filter(q=>q.book===fBook);
+  if(fText){const s=fText.toLowerCase();filtered=filtered.filter(q=>(q.text||'').toLowerCase().includes(s)||(q.module||'').toLowerCase().includes(s))}
+  // usage count per question across exams
+  const usedIn={};
+  D.E().forEach(ex=>{(ex.questionIds||[]).forEach(id=>{usedIn[id]=(usedIn[id]||0)+1})});
+
+  main.innerHTML=`<div id="shareBox" class="hidden mb-4"></div>
+  <div class="grid lg:grid-cols-5 gap-5">
+    <div class="lg:col-span-2 card p-5">
+      <h3 class="font-bold mb-3" style="color:var(--g)">آزمون جدید</h3>
+      <form id="fe" class="space-y-2">
+        <input id="et" required placeholder="عنوان آزمون">
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-[11px]">مدت (دقیقه)</label><input id="ed" type="number" value="30" min="5"></div>
+          <div><label class="text-[11px]">نمره منفی</label>
+            <select id="en"><option value="0">بدون منفی</option><option value="0.333" selected>منفی ۱/۳</option><option value="0.25">۱/۴</option><option value="0.5">۱/۲</option></select>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="text-[11px]">تاریخ و ساعت شروع (شمسی — تایپ یا انتخاب)</label>
+          <input id="es" dir="ltr" placeholder="1403/08/15 09:00">
+          <input id="esPick" type="datetime-local" dir="ltr" class="text-xs" title="انتخاب از تقویم">
+          <p class="text-[10px] text-slate-400">می‌توانید تایپ کنید یا از کادر پایین انتخاب کنید (خودکار به شمسی تبدیل می‌شود).</p>
+        </div>
+        <div class="space-y-1">
+          <label class="text-[11px]">تاریخ و ساعت پایان (شمسی — تایپ یا انتخاب)</label>
+          <input id="ee" dir="ltr" placeholder="1403/08/20 18:00">
+          <input id="eePick" type="datetime-local" dir="ltr" class="text-xs" title="انتخاب از تقویم">
+        </div>
+        <div class="p-3 rounded-xl border" style="border-color:var(--line);background:#fffcf7">
+          <div class="text-sm font-bold mb-2" style="color:var(--g)">نوع دسترسی آزمون</div>
+          <div class="flex flex-wrap gap-4 mb-2 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="eAccess" id="eFree" value="free" checked> رایگان</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="eAccess" id="ePaid" value="paid"> پولی</label>
+          </div>
+          <div id="paidBox" class="hidden space-y-2">
+            <div><label>مبلغ (تومان)</label><input id="ePrice" type="number" min="0" placeholder="مثال: 50000"></div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl border space-y-2" style="border-color:var(--line);background:#f8faf9">
+          <div class="text-sm font-bold mb-1" style="color:var(--g)">قوانین سخت‌گیرانه آزمون</div>
+          <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="eRetake"> اجازه شرکت مجدد (چندباره)</label>
+          <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="eBack" checked> اجازه برگشت به سؤالات قبلی</label>
+          <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="eShuffle" checked> چیدمان تصادفی سؤالات</label>
+          <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="eShowRes" checked> نمایش کارنامه بلافاصله بعد از آزمون</label>
+          <div><label class="text-[11px]">حد نصاب قبول (٪)</label><input id="ePass" type="number" min="0" max="100" value="50"></div>
+        </div>
+
+        <div class="border rounded-xl p-3" style="border-color:var(--line)">
+          <div class="flex flex-wrap justify-between gap-2 items-center mb-2">
+            <div class="text-sm font-bold" style="color:var(--g)">انتخاب سؤالات</div>
+            <div class="text-[11px] text-slate-500"><span id="eqCount">۰</span> انتخاب‌شده</div>
+          </div>
+          <div class="grid grid-cols-1 gap-2 mb-2">
+            <select id="eqBook" class="text-sm">
+              <option value="">همه دروس / تفکیک‌نشده</option>
+              ${books.map(b=>`<option value="${esc(b)}" ${fBook===b?'selected':''}>${esc(b)}</option>`).join('')}
+            </select>
+            <input id="eqSearch" class="text-sm" placeholder="جستجو در متن سؤال..." value="${esc(fText)}">
+          </div>
+          <div class="flex flex-wrap gap-2 text-[11px] mb-2">
+            <button type="button" class="text-teal-700" id="eqAll">انتخاب همین فیلتر</button>
+            <button type="button" class="text-slate-500" id="eqNone">لغو انتخاب‌ها</button>
+          </div>
+          <div id="eqList" class="max-h-56 overflow-y-auto border rounded-lg" style="border-color:var(--line)">
+            ${filtered.length?filtered.map(q=>`
+              <label class="flex items-start gap-2 px-2 py-1.5 border-b last:border-0 cursor-pointer hover:bg-stone-50" style="border-color:#eee">
+                <input type="checkbox" class="eq mt-1" value="${q.id}" style="width:16px;height:16px;min-width:16px;min-height:16px;flex-shrink:0">
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[10px] text-teal-700 leading-4">${esc(q.book||'بدون درس')}${q.module?' · '+esc(q.module):''} · ${esc(q.difficulty||'')} ${usedIn[q.id]?`· در ${toFa(usedIn[q.id])} آزمون`:''}</span>
+                  <span class="block text-[12px] leading-5 text-slate-700">${esc((q.text||'').slice(0,90))}${(q.text||'').length>90?'…':''}</span>
+                </span>
+              </label>`).join('')
+            :'<div class="p-4 text-center text-slate-400 text-xs">سؤالی با این فیلتر نیست</div>'}
+          </div>
+          <p class="text-[10px] text-slate-400 mt-2 leading-5">با فیلتر «درس» سؤالات را تفکیک کنید تا با آزمون‌های دیگر قاطی نشود.</p>
+        </div>
+
+        <button class="btn w-full">ثبت آزمون</button>
+      </form>
+    </div>
+    <div class="lg:col-span-3 card overflow-hidden">
+      <div class="p-3 border-b font-bold text-sm">آزمون‌های ساخته‌شده</div>
+      <div class="divide-y">${exams.length?exams.map(ex=>{const st=win(ex);return`<div class="p-4">
+        <div class="font-bold">${esc(ex.title)}</div>
+        <div class="text-xs text-slate-500">${ex.questionIds.length} سؤال · ${ex.duration} دقیقه · کد: ${ex.code||'—'}${ex.paid?` · <b style="color:#b8891b">پولی: ${toFa(ex.price)} تومان</b>`:''}</div><div class="text-[11px] text-slate-500 mt-0.5">شروع: ${fmtJalali(ex.startAt)} · پایان: ${fmtJalali(ex.endAt)}</div><div class="text-[10px] text-slate-400">${ex.allowRetake?'شرکت مجدد: بله':'شرکت مجدد: خیر'} · ${ex.allowBack===false?'بدون برگشت':'برگشت مجاز'}</div>
+        <span class="badge ${st.c}">${st.t}</span>${ex.paid?'<span class="badge bg-amber-50 text-amber-800 mr-1">پولی</span>':''}
+        <div class="flex flex-wrap gap-2 mt-2">
+          <button class="btn text-xs !py-1.5" onclick="shareEx('${ex.id}')">انتشار</button>
+          <button class="btn-s text-xs !py-1.5" onclick="pdfFromHtml('b.pdf',bookletHTML(D.E().find(x=>x.id==='${ex.id}')))">PDF</button>
+          <button class="btn-s text-xs !py-1.5" onclick="wordDownload('b.doc',bookletHTML(D.E().find(x=>x.id==='${ex.id}')))">Word</button>
+          <button class="btn-s text-xs !py-1.5" onclick="pdfFromHtml('k.pdf',keyHTML(D.E().find(x=>x.id==='${ex.id}')))">کلید</button>
+          <button class="text-red-500 text-xs" onclick="if(confirm('حذف آزمون؟')){D.sE(D.E().filter(x=>x.id!=='${ex.id}'));viewE()}">حذف</button>
+        </div></div>`}).join(''):'<div class="p-12 text-center text-slate-400">آزمونی نیست</div>'}
+      </div>
+    </div>
+  </div>`;
+
+  const syncPaid=()=>{
+    const paid=document.getElementById('ePaid')?.checked;
+    const box=document.getElementById('paidBox');
+    if(box) box.classList.toggle('hidden', !paid);
+  };
+  document.getElementById('ePaid')?.addEventListener('change', syncPaid);
+  document.getElementById('eFree')?.addEventListener('change', syncPaid);
+  syncPaid();
+  const g2jFill=(iso)=>{
+    if(!iso) return '';
+    const d=new Date(iso);
+    if(isNaN(d)) return '';
+    const [jy,jm,jd]=_g2jy(d.getFullYear(),d.getMonth()+1,d.getDate());
+    const hh=String(d.getHours()).padStart(2,'0'), mm=String(d.getMinutes()).padStart(2,'0');
+    return `${jy}/${String(jm).padStart(2,'0')}/${String(jd).padStart(2,'0')} ${hh}:${mm}`;
+  };
+  document.getElementById('esPick')?.addEventListener('change', function(){
+    if(this.value) document.getElementById('es').value = g2jFill(this.value);
+  });
+  document.getElementById('eePick')?.addEventListener('change', function(){
+    if(this.value) document.getElementById('ee').value = g2jFill(this.value);
+  });
+
+  const recount=()=>{const n=document.querySelectorAll('.eq:checked').length;const el=document.getElementById('eqCount');if(el)el.textContent=toFa(n)};
+  document.querySelectorAll('.eq').forEach(c=>c.addEventListener('change',recount));
+  recount();
+
+  document.getElementById('eqBook').onchange=()=>{window._eqBook=eqBook.value;window._eqText=eqSearch.value;viewE()};
+  document.getElementById('eqSearch').onkeydown=(e)=>{if(e.key==='Enter'){e.preventDefault();window._eqBook=eqBook.value;window._eqText=eqSearch.value;viewE()}};
+  document.getElementById('eqSearch').onchange=()=>{window._eqBook=eqBook.value;window._eqText=eqSearch.value;viewE()};
+
+  document.getElementById('eqAll').onclick=()=>{document.querySelectorAll('.eq').forEach(c=>c.checked=true);recount()};
+  document.getElementById('eqNone').onclick=()=>{document.querySelectorAll('.eq').forEach(c=>c.checked=false);recount()};
+
+  fe.onsubmit=e=>{
+    e.preventDefault();
+    const ids=[...document.querySelectorAll('.eq:checked')].map(c=>c.value);
+    if(!ids.length)return alert('حداقل یک سؤال انتخاب کنید');
+    const paid=document.getElementById('ePaid')?.checked||false;
+    const price=paid?(+document.getElementById('ePrice')?.value||0):0;
+    if(paid&&price<=0)return alert('برای آزمون پولی، مبلغ را وارد کنید');
+    const startAt=parseJalaliInput(es.value);
+    const endAt=parseJalaliInput(ee.value);
+    if(es.value.trim()&&!startAt) return alert('تاریخ شروع شمسی نامعتبر است. مثال: 1403/08/15 09:00');
+    if(ee.value.trim()&&!endAt) return alert('تاریخ پایان شمسی نامعتبر است. مثال: 1403/08/20 18:00');
+    if(startAt&&endAt&&new Date(endAt)<=new Date(startAt)) return alert('پایان باید بعد از شروع باشد');
+    const all=D.E();
+    all.push({
+      id:uid(),code:uid().slice(0,8),title:et.value.trim(),duration:+ed.value||30,negMark:+en.value||0,
+      shuffle:!!document.getElementById('eShuffle')?.checked,
+      allowRetake:!!document.getElementById('eRetake')?.checked,
+      allowBack:!!document.getElementById('eBack')?.checked,
+      showResult:document.getElementById('eShowRes')?!!document.getElementById('eShowRes').checked:true,
+      passPercent:+(document.getElementById('ePass')?.value||50),
+      questionIds:ids,startAt,endAt,paid,price,createdAt:new Date().toISOString()
+    });
+    D.sE(all);toast('آزمون ثبت شد');viewE();
+  };
+}
+function shareEx(id){
+  const ex=D.E().find(x=>x.id===id);if(!ex)return;
+  const qs=ex.questionIds.map(i=>D.Q().find(q=>q.id===i)).filter(Boolean);
+  const payload={v:1,exam:ex,questions:qs}; const token=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const short=ex.code||id.slice(-8); const url=location.href.split('?')[0].split('#')[0]+'#share='+encodeURIComponent(token);
+  const packs=D.packs();packs[short]=payload;D.sPacks(packs);
+  shareBox.classList.remove('hidden');
+  shareBox.innerHTML=`<div class="card p-4 border border-teal-200 bg-teal-50/40"><div class="font-bold mb-1">${esc(ex.title)}</div>
+    <div class="text-sm mb-2">کد: <b dir="ltr">${short}</b></div>
+    <textarea id="su" class="text-[11px] font-mono mb-2" dir="ltr" rows="3" style="width:100%;border-radius:10px;padding:8px" readonly>${url}</textarea>
+    <button class="btn text-sm" onclick="navigator.clipboard.writeText(su.value).then(()=>toast('کپی شد'))">کپی لینک</button>
+    <button class="btn-s text-sm" onclick="shareBox.classList.add('hidden')">بستن</button></div>`;
+}
+
+function viewT(){
+  const list=[...D.E()].reverse(), uid_=me().id;
+  main.innerHTML=`<div class="card p-4 mb-4"><div class="font-bold mb-2">ورود با کد / لینک</div>
+    <div class="grid md:grid-cols-2 gap-2"><div class="flex gap-2"><input id="examCodeIn" dir="ltr" placeholder="کد" style="flex:1"><button class="btn text-sm" onclick="enterByCode(examCodeIn.value)">ورود</button></div>
+    <div class="flex gap-2"><input id="examLinkIn" dir="ltr" placeholder="لینک" style="flex:1"><button class="btn-s text-sm" onclick="enterByPastedLink(examLinkIn.value)">اعمال</button></div></div></div>
+  <div class="card overflow-hidden"><div class="p-4 border-b font-bold">آزمون‌ها</div>
+    <div class="divide-y">${list.map(ex=>{const st=win(ex),taken=D.R().find(r=>r.userId===uid_&&r.examId===ex.id);
+      const act=taken?`<span class="text-xs bg-stone-100 px-3 py-2 rounded-xl">${taken.percent}٪</span>`:!st.ok?`<span class="badge ${st.c}">${st.t}</span>`:`<button class="btn text-sm" onclick="start('${ex.id}')">شروع</button>`;
+      return `<div class="p-4 flex flex-wrap justify-between gap-2 items-center"><div><div class="font-bold">${esc(ex.title)}</div>
+        <div class="text-xs text-slate-500">${ex.questionIds.length} سؤال · ${ex.duration} دقیقه${ex.paid?` · <span style="color:#b8891b;font-weight:700">مبلغ: ${toFa(ex.price)} تومان</span>`:' · رایگان'}</div>
+        <div class="text-[11px] text-slate-500">شروع: ${fmtJalali(ex.startAt)} · پایان: ${fmtJalali(ex.endAt)}</div>
+        <div class="text-[10px] text-slate-400">${ex.allowRetake?'امکان شرکت مجدد':'فقط یک‌بار'} · ${ex.allowBack===false?'بدون برگشت':'برگشت مجاز'}</div>
+        </div>${act}</div>`}).join('')||'<div class="p-10 text-center text-slate-400">خالی</div>'}</div></div>`;
+}
+
+let S=null,Tm=null;
+function start(id){
+  const ex=D.E().find(x=>x.id===id);if(!ex)return alert('نیست');
+  const st=win(ex);if(!st.ok)return alert(st.t);
+  const prev=D.R().find(r=>r.userId===me().id&&r.examId===id);
+  if(prev&&!ex.allowRetake)return alert('قبلاً در این آزمون شرکت کرده‌اید و شرکت مجدد مجاز نیست.');
+  if(prev&&ex.allowRetake&&!confirm('قبلاً شرکت کرده‌اید. دوباره شرکت می‌کنید؟'))return;
+  if(ex.paid&&ex.price>0){
+    const set=D.settings();
+    const card=set.cardNumber||'5859831119182276';
+    const cardName=set.cardName||'امیرحسین موذن';
+    const paidKey='hsPaid_'+me().id+'_'+ex.id;
+    if(!localStorage.getItem(paidKey)){
+      const msg=`این آزمون پولی است.\n\nمبلغ: ${ex.price.toLocaleString('fa-IR')} تومان\nشماره کارت:\n${card}\nبه نام: ${cardName}\n\nپس از واریز، روی تأیید بزنید.\n(در صورت نیاز رسید را برای پشتیبانی ارسال کنید)`;
+      if(!confirm(msg)) return;
+      if(!confirm('آیا واریز را انجام داده‌اید؟')) return;
+      localStorage.setItem(paidKey,'1');
+      toast('پرداخت ثبت شد — موفق باشید');
+    }
+  }
+  let questions=ex.questionIds.map(i=>D.Q().find(q=>q.id===i)).filter(Boolean);
+  if(ex.shuffle) questions=shuffle(questions);
+  S={examId:ex.id,examTitle:ex.title,userId:me().id,studentName:me().name,questions,answers:{},flags:{},idx:0,negMark:ex.negMark||0,passPercent:ex.passPercent??50,allowBack:ex.allowBack!==false,showResult:ex.showResult!==false,endAt:Date.now()+ex.duration*6e4,warned:false};
+  localStorage.setItem('hsS',JSON.stringify(S)); window.onbeforeunload=()=>'آزمون در جریان است'; runExam();
+}
+function runExam(){
+  nav.style.visibility='hidden'; if(Tm)clearInterval(Tm);
+  Tm=setInterval(()=>{const left=S.endAt-Date.now();if(left<=0){clearInterval(Tm);finish(1);return}
+    if(!S.warned&&left<300000){S.warned=true;toast('کمتر از ۵ دقیقه!')}
+    const el=document.getElementById('tm');if(!el)return;
+    el.textContent=`${String(Math.floor(left/36e5)).padStart(2,'0')}:${String(Math.floor(left%36e5/6e4)).padStart(2,'0')}:${String(Math.floor(left%6e4/1e3)).padStart(2,'0')}`;
+  },400); drawQ();
+}
+function drawQ(){
+  const q=S.questions[S.idx],L=['الف','ب','ج','د'],ans=Object.keys(S.answers).length;
+  main.innerHTML=`<div class="card overflow-hidden"><div class="brand-bar px-4 py-3 flex flex-wrap justify-between gap-3">
+    <div><div class="font-bold">${esc(S.examTitle)}</div><div class="text-xs text-white/70">سؤال ${toFa(S.idx+1)}/${toFa(S.questions.length)} · پاسخ ${toFa(ans)}</div>
+    <div class="progress mt-2" style="max-width:200px;background:rgba(255,255,255,.2)"><i style="width:${Math.round(ans/S.questions.length*100)}%;background:#fde68a"></i></div></div>
+    <div class="text-center"><div class="text-[10px] text-white/60">زمان</div><div id="tm" class="font-mono font-bold text-lg">--:--:--</div></div></div>
+    <div class="grid lg:grid-cols-4"><div class="lg:col-span-3 p-5">
+      <p class="mb-5 leading-8">${esc(q.text)}</p>
+      <div class="space-y-2">${q.opts.map((o,i)=>{const x=L[i],on=S.answers[q.id]===x;return`<label class="opt ${on?'on':''}"><input type="radio" name="a" ${on?'checked':''} onchange="pick('${q.id}','${x}')"><span class="text-sm"><b class="ml-2">${x})</b> ${esc(o)}</span></label>`}).join('')}</div>
+      <div class="flex flex-wrap gap-2 mt-6 pt-4 border-t">
+        ${S.allowBack!==false?`<button class="btn-s text-sm" onclick="S.idx=Math.max(0,S.idx-1);drawQ()">قبلی</button>`:''}
+        <button class="btn text-sm" onclick="S.idx=Math.min(S.questions.length-1,S.idx+1);drawQ()">${S.idx>=S.questions.length-1?'پایان سؤالات':'بعدی'}</button>
+        <button class="btn-s text-sm" onclick="flag()">${S.flags[q.id]?'برداشتن علامت':'علامت‌گذاری'}</button>
+        <button class="btn-d text-sm mr-auto" onclick="if(confirm('پایان و ثبت نهایی؟'))finish(0)">تحویل آزمون</button>
+      </div></div>
+      <div class="border-r bg-stone-50 p-4"><div class="text-sm font-bold mb-2">ناوبری</div>
+        <div class="grid grid-cols-5 gap-1.5">${S.questions.map((qq,i)=>`<button class="qnav${i===S.idx?' c':''}${S.answers[qq.id]?' a':''}${S.flags[qq.id]?' f':''}" ${S.allowBack===false&&i<S.idx?'disabled style="opacity:.35"':''} onclick="${S.allowBack===false&&i<S.idx?'':'S.idx='+i+';drawQ()'}">${i+1}</button>`).join('')}</div>
+        ${S.allowBack===false?'<div class="text-[10px] text-amber-700 mt-2">برگشت به سؤالات قبلی غیرفعال است</div>':''}
+      </div></div></div>`;
+}
+function pick(id,L){S.answers[id]=L;localStorage.setItem('hsS',JSON.stringify(S));drawQ()}
+function flag(){const id=S.questions[S.idx].id;S.flags[id]?delete S.flags[id]:S.flags[id]=1;localStorage.setItem('hsS',JSON.stringify(S));drawQ()}
+function finish(auto){
+  if(Tm)clearInterval(Tm);localStorage.removeItem('hsS');window.onbeforeunload=null;
+  let c=0,w=0,b=0;const details=[];
+  S.questions.forEach(q=>{const a=S.answers[q.id]||null;let st='blank';if(a===q.correct){st='correct';c++}else if(a){st='wrong';w++}else b++;details.push({text:q.text,correct:q.correct,answered:a,status:st})});
+  const total=S.questions.length,raw=c-w*S.negMark,percent=total?+(raw/total*100).toFixed(2):0;
+  const result={id:uid(),examId:S.examId,examTitle:S.examTitle,userId:S.userId,studentName:S.studentName,correct:c,wrong:w,blank:b,total,negMark:S.negMark,passPercent:S.passPercent,rawScore:+raw.toFixed(2),percent,details,finishedAt:new Date().toISOString(),auto};
+  const rs=D.R();rs.push(result);const same=rs.filter(r=>r.examId===result.examId).sort((a,b)=>b.percent-a.percent);let rank=1;same.forEach((r,i)=>{if(i&&r.percent<same[i-1].percent)rank=i+1;r.rank=rank});D.sR(rs);
+  const showRes=S.showResult!==false;S=null;nav.style.visibility='';if(showRes)showCert(result.id);else{toast('آزمون ثبت شد');go('r');}
+}
+
+function viewR(){
+  let list=D.R();if(!adm())list=list.filter(x=>x.userId===me().id);list=[...list].reverse();const pass=D.settings().passPercent||50;
+  main.innerHTML=`<div class="card overflow-hidden"><div class="p-4 border-b flex justify-between"><b>نتایج</b>
+    ${adm()?`<span><button class="btn-s text-xs" onclick="csvDownload('r.csv',[['رتبه','نام','آزمون','درصد'],...D.R().map(r=>[r.rank,r.studentName,r.examTitle,r.percent])])">Excel</button>
+    <button class="btn-s text-xs" onclick="pdfFromHtml('r.pdf','<h2>نتایج</h2>'+D.R().map(r=>'<p>'+esc(r.studentName)+' — '+r.percent+'٪</p>').join(''))">PDF</button></span>`:''}</div>
+    <div class="overflow-x-auto"><table><thead><tr><th>داوطلب</th><th>آزمون</th><th>درصد</th><th>وضعیت</th><th>رتبه</th><th></th></tr></thead>
+    <tbody>${list.map(r=>`<tr><td>${esc(r.studentName)}</td><td>${esc(r.examTitle)}</td>
+      <td class="font-bold ${r.percent>=pass?'text-teal-700':'text-red-500'}">${r.percent}٪</td>
+      <td>${r.percent>=pass?'قبول':'مردود'}</td><td>${r.rank??'—'}</td>
+      <td><button class="text-teal-700 text-xs" onclick="showCert('${r.id}')">کارنامه</button></td></tr>`).join('')||'<tr><td colspan="6" class="text-center py-8 text-slate-400">خالی</td></tr>'}</tbody></table></div></div>`;
+}
+function showCert(id){
+  const r=D.R().find(x=>x.id===id);if(!r)return;if(!adm()&&r.userId!==me().id)return;
+  const pass=r.passPercent??50,ok=r.percent>=pass;
+  main.innerHTML=`<div class="max-w-2xl mx-auto card overflow-hidden"><div class="brand-bar text-center py-6"><div class="brand-font text-sm text-white/60">HESABDARSPEED</div><div class="text-xl font-black">کارنامه</div></div>
+    <div class="p-6"><div class="grid grid-cols-2 gap-2 text-sm mb-4"><div>${esc(r.studentName)}</div><div>${esc(r.examTitle)}</div>
+      <div>رتبه: ${r.rank??'—'}</div><div class="${ok?'text-teal-700':'text-red-500'} font-bold">${ok?'قبول':'مردود'} · ${r.percent}٪</div></div>
+      <div class="grid grid-cols-4 gap-2 mb-4">
+        <div class="bg-teal-50 rounded-xl p-3 text-center"><div class="text-xl font-bold text-teal-700">${r.correct}</div><div class="text-[10px]">صحیح</div></div>
+        <div class="bg-red-50 rounded-xl p-3 text-center"><div class="text-xl font-bold text-red-500">${r.wrong}</div><div class="text-[10px]">غلط</div></div>
+        <div class="bg-stone-100 rounded-xl p-3 text-center"><div class="text-xl font-bold">${r.blank}</div><div class="text-[10px]">نزده</div></div>
+        <div class="bg-amber-50 rounded-xl p-3 text-center"><div class="text-xl font-bold text-amber-700">${r.percent}٪</div><div class="text-[10px]">درصد</div></div>
+      </div>
+      <div class="flex gap-2"><button class="btn flex-1" onclick="pdfFromHtml('k.pdf',certHTML(D.R().find(x=>x.id==='${r.id}')))">PDF</button><button class="btn-s" onclick="go('r')">بازگشت</button></div>
+    </div></div>`;
+}
+function viewLB(){
+  const rows=Object.values(D.R().reduce((a,r)=>{if(!a[r.userId+r.examId]||r.percent>a[r.userId+r.examId].percent)a[r.userId+r.examId]=r;return a;},{})).sort((a,b)=>b.percent-a.percent);
+  let rank=1;rows.forEach((r,i)=>{if(i&&r.percent<rows[i-1].percent)rank=i+1;r._rank=rank});
+  main.innerHTML=`<div class="card overflow-hidden"><div class="p-4 border-b font-bold">رتبه‌بندی</div>
+    <table><thead><tr><th>رتبه</th><th>نام</th><th>آزمون</th><th>درصد</th></tr></thead>
+    <tbody>${rows.map((r,i)=>`<tr class="${i<3?'bg-amber-50/50':''}"><td>${r._rank===1?'🥇':r._rank===2?'🥈':r._rank===3?'🥉':r._rank}</td>
+      <td>${esc(r.studentName)}</td><td>${esc(r.examTitle)}</td><td class="font-bold">${r.percent}٪</td></tr>`).join('')||'<tr><td colspan="4" class="text-center py-8 text-slate-400">خالی</td></tr>'}</tbody></table></div>`;
+}
+function viewN(){
+  const list=[...D.N()].reverse();
+  main.innerHTML=`${adm()?`<div class="card p-5 mb-4"><form id="fn" class="space-y-2"><input id="nt" required placeholder="عنوان"><textarea id="nb" required rows="2" placeholder="متن"></textarea><button class="btn">انتشار</button></form></div>`:''}
+  <div class="card divide-y">${list.map(n=>`<div class="p-4"><div class="font-bold">${esc(n.title)}</div><div class="text-sm text-slate-600 mt-1">${esc(n.body)}</div>
+    <div class="text-[11px] text-slate-400 mt-1">${fmt(n.at)}</div>${adm()?`<button class="text-red-500 text-xs" onclick="D.sN(D.N().filter(x=>x.id!=='${n.id}'));viewN()">حذف</button>`:''}</div>`).join('')||'<div class="p-10 text-center text-slate-400">خالی</div>'}</div>`;
+  if(adm()) fn.onsubmit=e=>{e.preventDefault();const a=D.N();a.push({id:uid(),title:nt.value.trim(),body:nb.value.trim(),at:new Date().toISOString(),by:me().name});D.sN(a);viewN()};
+
+  if(adm()){
+    const box=document.createElement('div');
+    box.className='card mt-4 overflow-hidden';
+    const cl=[...D.C()].reverse();
+    box.innerHTML=`<div class="p-4 border-b font-bold">مدیریت نظرات داوطلبان (${toFa(cl.length)})</div>
+      <div class="divide-y max-h-80 overflow-y-auto">${cl.length?cl.map(c=>`<div class="p-3 flex justify-between gap-2">
+        <div><div class="text-sm font-bold">${esc(c.name)} <span class="text-amber-500 text-xs">${'★'.repeat(c.rate||0)}</span></div>
+        <div class="text-xs text-slate-600 mt-1">${esc(c.text)}</div>
+        <div class="text-[10px] text-slate-400 mt-1">${fmt(c.at)}</div></div>
+        <button class="text-red-500 text-xs shrink-0" onclick="deleteComment('${c.id}');viewN()">حذف</button>
+      </div>`).join(''):'<div class="p-8 text-center text-slate-400 text-sm">نظری نیست</div>'}</div>`;
+    main.appendChild(box);
+  }
+}
+function viewU(){
+  if(!adm())return;
+  main.innerHTML=`<div class="card overflow-hidden"><div class="p-4 border-b font-bold">کاربران</div>
+    <table><thead><tr><th>نام</th><th>کاربری</th><th>نقش</th><th>وضعیت</th><th></th></tr></thead>
+    <tbody>${D.U().map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${u.username}</td><td>${u.role==='ADMIN'?'مدیر':'داوطلب'}</td>
+      <td>${u.active?'فعال':'مسدود'}</td>
+      <td>${u.username==='admin'?'':`<button class="text-xs" onclick="(function(){const a=D.U();const x=a.find(z=>z.id==='${u.id}');x.active=x.active?0:1;D.sU(a);viewU()})()">${u.active?'مسدود':'فعال'}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function viewST(){
+  main.innerHTML=`<div class="grid md:grid-cols-2 gap-4">
+    <div class="card p-5"><div class="font-bold mb-3">پروفایل</div>
+      <div class="text-sm mb-3">${esc(me().name)} · <span dir="ltr">${esc(me().username)}</span></div>
+      <form id="fp" class="space-y-2"><input id="p1" type="password" required minlength="4" placeholder="رمز جدید"><input id="p2" type="password" required placeholder="تکرار"><button class="btn text-sm">تغییر رمز</button></form></div>
+    <div class="card p-5"><div class="font-bold mb-3">تلگرام رسمی</div>
+      <a class="btn-gold block text-center mb-2" href="https://t.me/hesabdar_speed" target="_blank">کانال @hesabdar_speed</a>
+      <a class="btn-s block text-center" href="https://t.me/hesabdaranspeed1" target="_blank">گروه پرسش و پاسخ</a>
+      ${adm()?`<div class="mt-4 space-y-2">
+        <div><label>حدنصاب قبول ٪</label><input id="sp" type="number" value="${D.settings().passPercent||50}"></div>
+        <div class="p-3 rounded-xl border" style="border-color:var(--line)">
+          <div class="font-bold text-sm mb-2" style="color:var(--g)">درآمدزایی / کارت واریز</div>
+          <div><label>شماره کارت</label><input id="scard" dir="ltr" value="${esc(D.settings().cardNumber||'5859831119182276')}"></div>
+          <div class="mt-2"><label>نام صاحب کارت</label><input id="scname" value="${esc(D.settings().cardName||'امیرحسین موذن')}"></div>
+          <p class="text-[11px] text-slate-500 mt-2 leading-6">فقط وقتی آزمون را «پولی» کنید از داوطلب مبلغ و این کارت نمایش داده می‌شود. اجباری نیست.</p>
+        </div>
+        <button class="btn text-sm" onclick="D.sSettings({...D.settings(),passPercent:+sp.value||50,cardNumber:scard.value.trim(),cardName:scname.value.trim()});toast('ذخیره شد')">ذخیره تنظیمات</button>
+      </div>`:''}
+    </div></div>`;
+  fp.onsubmit=async e=>{e.preventDefault();if(p1.value!==p2.value)return alert('یکسان نیست');const users=D.U();const u=users.find(x=>x.id===me().id);u.salt=uid();u.passwordHash=await H(p1.value,u.salt);D.sU(users);toast('رمز عوض شد')};
+}
+
+
+/* ===== NOTES / جزوات (IndexedDB) ===== */
+const NotesDB = {
+  db: null,
+  async open(){
+    if(this.db) return this.db;
+    this.db = await new Promise((resolve,reject)=>{
+      const req=indexedDB.open('hesabdarspeed_notes',1);
+      req.onupgradeneeded=e=>{const db=e.target.result; if(!db.objectStoreNames.contains('files')) db.createObjectStore('files',{keyPath:'id'});};
+      req.onsuccess=e=>resolve(e.target.result);
+      req.onerror=e=>reject(e.target.error);
+    });
+    return this.db;
+  },
+  async all(){
+    const db=await this.open();
+    return new Promise((resolve,reject)=>{
+      const tx=db.transaction('files','readonly');
+      const req=tx.objectStore('files').getAll();
+      req.onsuccess=()=>resolve((req.result||[]).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')));
+      req.onerror=()=>reject(req.error);
+    });
+  },
+  async put(item){
+    const db=await this.open();
+    return new Promise((resolve,reject)=>{
+      const tx=db.transaction('files','readwrite');
+      tx.objectStore('files').put(item);
+      tx.oncomplete=()=>resolve(true);
+      tx.onerror=()=>reject(tx.error);
+    });
+  },
+  async del(id){
+    const db=await this.open();
+    return new Promise((resolve,reject)=>{
+      const tx=db.transaction('files','readwrite');
+      tx.objectStore('files').delete(id);
+      tx.oncomplete=()=>resolve(true);
+      tx.onerror=()=>reject(tx.error);
+    });
+  },
+  async get(id){
+    const db=await this.open();
+    return new Promise((resolve,reject)=>{
+      const req=db.transaction('files','readonly').objectStore('files').get(id);
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>reject(req.error);
+    });
+  }
+};
+
+function fmtSize(n){
+  if(n<1024) return toFa(n)+' B';
+  if(n<1048576) return toFa((n/1024).toFixed(1))+' KB';
+  return toFa((n/1048576).toFixed(2))+' MB';
+}
+
+async function viewNotes(){
+  let list=[];
+  try{ list=await NotesDB.all(); }catch(e){ console.error(e); toast('خطا در خواندن جزوات'); }
+  main.innerHTML=`
+  <div class="grid lg:grid-cols-3 gap-5">
+    ${adm()?`<div class="card p-5 h-fit">
+      <h3 class="font-bold mb-3" style="color:var(--g)">آپلود جزوه جدید</h3>
+      <form id="fnNote" class="space-y-2">
+        <div><label>عنوان جزوه</label><input id="nTitle" required placeholder="مثال: جزوه حسابداری میانه"></div>
+        <div><label>دسته / درس (اختیاری)</label><input id="nCat" placeholder="ارشد، استخدامی، کاردانی..."></div>
+        <div><label>توضیح کوتاه (اختیاری)</label><textarea id="nDesc" rows="2" placeholder="توضیح برای داوطلبان"></textarea></div>
+        <div><label>فایل PDF یا تصویر</label>
+          <input id="nFile" type="file" accept="*/*" required>
+          <p class="text-[11px] text-teal-800 mt-1">از لیست، «Files / فایل‌ها / Browse» را بزنید و PDF را انتخاب کنید. اگر فقط گالری آمد، روی سه نقطه یا Files بزنید.</p>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-6">فرمت: PDF یا عکس. محدودیت مصنوعی اعمال نمی‌شود؛ ظرفیت به فضای مرورگر دستگاه بستگی دارد.</p>
+        <button class="btn w-full" id="nBtn">ذخیره جزوه</button>
+        <div id="nProg" class="hidden text-xs text-teal-700">در حال ذخیره...</div>
+      </form>
+    </div>`:''}
+    <div class="${adm()?'lg:col-span-2':'lg:col-span-3'} card overflow-hidden">
+      <div class="p-4 border-b bg-stone-50 flex justify-between items-center">
+        <b>آرشیو جزوات (${toFa(list.length)})</b>
+        <span class="text-[11px] text-slate-500">PDF و تصویر</span>
+      </div>
+      <div class="divide-y max-h-[75vh] overflow-y-auto">
+        ${list.length?list.map(n=>`<div class="p-4 flex flex-wrap justify-between gap-3 items-start">
+          <div class="min-w-0 flex-1">
+            <div class="font-bold">${esc(n.title)}</div>
+            <div class="text-xs text-slate-500 mt-1">${esc(n.category||'عمومی')} · ${n.type||''} · ${fmtSize(n.size||0)} · ${fmt(n.createdAt)}</div>
+            ${n.desc?`<div class="text-xs text-slate-600 mt-1 leading-6">${esc(n.desc)}</div>`:''}
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn text-xs !py-1.5" onclick="openNote('${n.id}')">مشاهده / دانلود</button>
+            ${adm()?`<button class="text-red-500 text-xs" onclick="deleteNote('${n.id}')">حذف</button>`:''}
+          </div>
+        </div>`).join(''):'<div class="p-12 text-center text-slate-400">هنوز جزوه‌ای آپلود نشده است</div>'}
+      </div>
+    </div>
+  </div>`;
+
+  if(adm()){
+    const form=document.getElementById('fnNote');
+    form.onsubmit=async (e)=>{
+      e.preventDefault();
+      const file=document.getElementById('nFile').files[0];
+      if(!file) return alert('فایل را انتخاب کنید');
+      const name=(file.name||'').toLowerCase();
+      const isPdf=file.type==='application/pdf'||file.type==='application/x-pdf'||/\.pdf$/i.test(name);
+      const isImg=(file.type||'').startsWith('image/')||/\.(png|jpe?g|gif|webp|bmp)$/i.test(name);
+      if(!isPdf&&!isImg) return alert('فقط فایل PDF یا تصویر (jpg/png/webp) مجاز است');
+      document.getElementById('nProg').classList.remove('hidden');
+      document.getElementById('nBtn').disabled=true;
+      try{
+        const buf=await file.arrayBuffer();
+        const bytes=new Uint8Array(buf);
+        // store as base64 chunks-friendly
+        let binary=''; const chunk=0x8000;
+        for(let i=0;i<bytes.length;i+=chunk) binary+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk));
+        const base64=btoa(binary);
+        const item={
+          id:uid(),
+          title:nTitle.value.trim(),
+          category:(nCat.value||'').trim(),
+          desc:(nDesc.value||'').trim(),
+          name:file.name,
+          type:isPdf?'PDF':(file.type||'image'),
+          mime:file.type||(isPdf?'application/pdf':'image/jpeg'),
+          size:file.size,
+          data:base64,
+          createdAt:new Date().toISOString(),
+          by:me().name
+        };
+        await NotesDB.put(item);
+        toast('جزوه ذخیره شد');
+        viewNotes();
+      }catch(err){
+        console.error(err);
+        alert('ذخیره ناموفق بود. احتمالاً فضای مرورگر کافی نیست.');
+        document.getElementById('nProg').classList.add('hidden');
+        document.getElementById('nBtn').disabled=false;
+      }
+    };
+  }
+}
+
+async function openNote(id){
+  try{
+    const n=await NotesDB.get(id);
+    if(!n||!n.data) return alert('فایل یافت نشد');
+    const bin=atob(n.data);
+    const arr=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+    const blob=new Blob([arr],{type:n.mime||'application/octet-stream'});
+    const url=URL.createObjectURL(blob);
+    // open in new tab
+    const w=window.open(url,'_blank');
+    if(!w){
+      // fallback download
+      const a=document.createElement('a'); a.href=url; a.download=n.name||n.title||'note'; a.click();
+    }
+    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+  }catch(e){console.error(e);alert('خطا در باز کردن فایل')}
+}
+
+async function deleteNote(id){
+  if(!confirm('حذف این جزوه؟')) return;
+  await NotesDB.del(id);
+  toast('حذف شد');
+  viewNotes();
+}
+
+
+function applyPack(data){const qs=D.Q();(data.questions||[]).forEach(q=>{if(!qs.find(x=>x.id===q.id))qs.push(q)});D.sQ(qs);const es=D.E();if(!es.find(e=>e.id===data.exam.id))es.push(data.exam);D.sE(es);if(data.exam.code){const p=D.packs();p[data.exam.code]=data;D.sPacks(p)}}
+function importShare(){
+  let token=null;const hash=location.hash||'';
+  if(hash.startsWith('#share=')) token=decodeURIComponent(hash.slice(7));
+  if(!token)return null;
+  try{const data=JSON.parse(decodeURIComponent(escape(atob(token))));applyPack(data);return data.exam.id}catch{return null}
+}
+function enterByCode(code){code=(code||'').trim();const data=D.packs()[code];if(data){applyPack(data);start(data.exam.id);return}const ex=D.E().find(e=>e.code===code);if(ex)start(ex.id);else alert('کد یافت نشد')}
+function enterByPastedLink(raw){raw=(raw||'').trim();let token=null;try{if(raw.includes('#share='))token=decodeURIComponent(raw.split('#share=')[1].split('&')[0]);else if(/^[A-Za-z0-9+/=]+$/.test(raw))token=raw}catch{}if(!token)return alert('نامعتبر');
+  try{const data=JSON.parse(decodeURIComponent(escape(atob(token))));applyPack(data);go('t');if(confirm('شروع؟'))start(data.exam.id)}catch{alert('خطا')}}
+
+(async()=>{
+  await seed(); refreshLandingStats();
+  const shared=importShare();
+  if(me()){boot();if(shared){history.replaceState({},'',location.pathname);if(confirm('آزمون لینک‌شده — شروع؟'))start(shared)}
+    else{try{const raw=localStorage.getItem('hsS');if(raw){const p=JSON.parse(raw);if(p.userId===me().id&&p.endAt>Date.now()&&confirm('ادامه آزمون؟')){S=p;runExam()}}}catch{}}
+  }else if(shared){sessionStorage.setItem('pend',shared);showAuth('l');alert('برای شرکت وارد شوید')}
+})();
+</script>
+</body>
+</html>
